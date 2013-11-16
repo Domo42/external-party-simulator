@@ -1,0 +1,61 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2
+                              http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+
+    <id>external-party-simulator</id>
+
+    <formats>
+        <format>dir</format>
+    </formats>
+
+    <files>
+        <file>
+            <outputDirectory>/</outputDirectory>
+            <source>/src/resources/start.bat</source>
+        </file>
+        <file>
+            <outputDirectory>/</outputDirectory>
+            <source>/src/resources/NOTICE</source>
+        </file>
+        <file>
+            <outputDirectory>/</outputDirectory>
+            <source>/src/resources/LICENSE</source>
+        </file>
+    </files>
+
+    <fileSets>
+        <fileSet>
+            <outputDirectory>/config</outputDirectory>
+            <directory>/src/resources/config</directory>
+        </fileSet>
+    </fileSets>
+
+    <dependencySets>
+
+        <!-- reference libraries -->
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <useTransitiveDependencies>true</useTransitiveDependencies>
+            <outputDirectory>/lib</outputDirectory>
+            <includes>
+                <include>ch.qos.logback:logback-classic</include>
+                <include>ch.qos.logback:logback-core</include>
+                <include>org.slf4j:slf4j-api</include>
+                <include>com.google.inject:guice</include>
+                <include>com.google.guava:guava</include>
+            </includes>
+        </dependencySet>
+
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputDirectory>/bin</outputDirectory>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
+            <outputFileNameMapping>simulator-service.jar</outputFileNameMapping>
+            <includes>
+                <include>com.codebullets.external-party-sim:simulator-service</include>
+            </includes>
+        </dependencySet>
+    </dependencySets>
+
+ </assembly>

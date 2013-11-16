@@ -1,0 +1,44 @@
+===========================================================
+= NOTICE file of the CodeBullets External Party Simulator =
+===========================================================
+
+This software is using the following libraries:
+
+---------------------------------------------
+SLF4J
+MIT LICENSE
+
+http://www.slf4j.org/
+http://www.slf4j.org/license.html
+
+
+---------------------------------------------
+LOGBack
+LGPL 2.1
+
+http://logback.qos.ch/license.html
+http://logback.qos.ch/license.html
+
+
+----------------------------------------------
+google-guice
+Apache License 2.0
+
+https://code.google.com/p/google-guice/
+http://www.apache.org/licenses/LICENSE-2.0
+
+
+----------------------------------------------
+Groovy
+Apache License 2.0
+
+http://groovy.codehaus.org/
+http://groovy.codehaus.org/License+Information
+
+
+----------------------------------------------
+Java
+Oracle Binary Code License Agreement for the Java SE Platform Products
+
+http://www.oracle.com/technetwork/java/index.html
+http://www.oracle.com/technetwork/java/javase/terms/license/index.html
