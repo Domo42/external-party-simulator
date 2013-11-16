@@ -15,6 +15,12 @@
  */
 package com.codebullets.external.party.simulator;
 
+import com.codebullets.external.party.simulator.startup.Service;
+import com.codebullets.external.party.simulator.startup.ServiceModule;
+import com.codebullets.sagalib.guice.SagaModuleBuilder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,7 +29,6 @@ import org.slf4j.LoggerFactory;
  */
 public final class Program {
     private static final Logger LOG = LoggerFactory.getLogger(Program.class);
-    private static final long SLEEP_TIME = 500;
 
     /**
      * Prevent instance of this class.
@@ -38,8 +43,12 @@ public final class Program {
     public static void main(final String [] args) throws InterruptedException {
         LOG.info("Starting simulator service");
 
-        while (true) {
-            Thread.sleep(SLEEP_TIME);
-        }
+        Module sagaLibModule = SagaModuleBuilder.configure().build();
+
+        Injector injector = Guice.createInjector(new ServiceModule(), sagaLibModule);
+        Service service = injector.getInstance(Service.class);
+
+        Thread serviceThread = new Thread(service, "SimulatorService");
+        serviceThread.start();
     }
 }
