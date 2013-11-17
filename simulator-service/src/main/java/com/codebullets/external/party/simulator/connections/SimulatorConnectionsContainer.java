@@ -25,13 +25,27 @@ import java.util.Map;
 public class SimulatorConnectionsContainer implements ConnectionsContainer {
     private Map<String, Connection> connections = Collections.synchronizedMap(new HashMap<String, Connection>());
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Connection get(final String refName) {
         return connections.get(refName);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void put(final String refName, final Connection connection) {
         connections.put(refName, connection);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void remove(final String refName) {
+        connections.remove(refName);
     }
 }

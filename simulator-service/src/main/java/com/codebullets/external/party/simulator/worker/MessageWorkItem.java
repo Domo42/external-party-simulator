@@ -22,13 +22,15 @@ import static com.google.common.base.Preconditions.checkState;
  */
 public final class MessageWorkItem implements WorkItem {
     private final ContentType contentType;
-    private Object content;
+    private final String messageType;
+    private final Object content;
 
     /**
      * Use static builder method to create instance.
      */
-    private MessageWorkItem(final String  text) {
+    private MessageWorkItem(final String  text, final String messageType) {
         contentType = ContentType.STRING;
+        this.messageType = messageType;
         content = text;
     }
 
@@ -48,9 +50,16 @@ public final class MessageWorkItem implements WorkItem {
     }
 
     /**
+     * Gets the message instance type.
+     */
+    public String getMessageType() {
+        return messageType;
+    }
+
+    /**
      * Creates a message work item of type String.
      */
-    public static MessageWorkItem create(final String text) {
-        return new MessageWorkItem(text);
+    public static MessageWorkItem create(final String text, final String msgType) {
+        return new MessageWorkItem(text, msgType);
     }
 }

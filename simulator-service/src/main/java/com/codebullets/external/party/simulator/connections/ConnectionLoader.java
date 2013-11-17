@@ -16,26 +16,7 @@
 package com.codebullets.external.party.simulator.connections;
 
 /**
- * Connects to one or more available web sockets.
+ * Loads connections configured from groovy script configuration.
  */
-public class OutboundWebSocketConnection implements Connection {
-    @Override
-    public void start() {
-    }
-
-    @Override
-    public void setMonitor(final ConnectionMonitor monitor) {
-    }
-
-    @Override
-    public void send(final ConnectionContext context, final String text) {
-    }
-
-    @Override
-    public void send(final ConnectionContext context, final byte[] buffer) {
-    }
-
-    @Override
-    public void send(final ConnectionContext context, final Object object) {
-    }
+public class ConnectionLoader {
 }

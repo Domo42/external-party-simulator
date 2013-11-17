@@ -30,4 +30,9 @@ public interface ConnectionsContainer {
      * Add a connection to the container.
      */
     void put(String refName, Connection connection);
+
+    /**
+     * Removes a connection from the container.
+     */
+    void remove(String refName);
 }

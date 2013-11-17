@@ -30,18 +30,18 @@ public interface Connection {
      */
     void setMonitor(ConnectionMonitor monitor);
 
-    /**
+   /**
      * Sends a single text string over the connection.
      */
-    void send(ConnectionContext context, String text);
+    void send(String text);
 
     /**
      * Sends a buffer of bytes over the connection.
      */
-    void send(ConnectionContext context, byte[] buffer);
+    void send(byte[] buffer);
 
     /**
      * Sends any kind of object over the connection.
      */
-    void send(ConnectionContext context, Object object);
+    void send(Object object);
 }
