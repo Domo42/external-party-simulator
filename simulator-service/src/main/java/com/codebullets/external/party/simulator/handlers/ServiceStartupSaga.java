@@ -15,6 +15,7 @@
  */
 package com.codebullets.external.party.simulator.handlers;
 
+import com.codebullets.external.party.simulator.connections.ConnectionLoader;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import com.codebullets.external.party.simulator.startup.StartUpWorkItem;
 import com.codebullets.sagalib.AbstractSingleEventSaga;
@@ -30,13 +31,15 @@ import javax.inject.Inject;
 public class ServiceStartupSaga extends AbstractSingleEventSaga {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceStartupSaga.class);
     private final ConnectionMonitor monitor;
+    private final ConnectionLoader loader;
 
     /**
      * Generates a new instance of ServiceStartupSaga.
      */
     @Inject
-    public ServiceStartupSaga(final ConnectionMonitor monitor) {
+    public ServiceStartupSaga(final ConnectionMonitor monitor, final ConnectionLoader loader) {
         this.monitor = monitor;
+        this.loader = loader;
     }
 
     /**
@@ -45,5 +48,7 @@ public class ServiceStartupSaga extends AbstractSingleEventSaga {
     @StartsSaga
     public void start(final StartUpWorkItem message) {
         LOG.info("starting connections");
+
+        loader.startAllConnections();
     }
 }

@@ -15,6 +15,7 @@
  */
 package com.codebullets.external.party.simulator.startup;
 
+import com.codebullets.external.party.simulator.connections.ConnectionLoader;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import com.codebullets.external.party.simulator.connections.ConnectionsContainer;
 import com.codebullets.external.party.simulator.connections.ServiceConnectionMonitor;
@@ -38,5 +39,6 @@ public class ServiceModule extends AbstractModule {
         bind(WorkerQueue.class).to(ServiceWorkerQueue.class).in(Singleton.class);
         bind(ConnectionsContainer.class).to(SimulatorConnectionsContainer.class).in(Singleton.class);
         bind(ConnectionMonitor.class).to(ServiceConnectionMonitor.class).in(Singleton.class);
+        bind(ConnectionLoader.class).in(Singleton.class);
     }
 }

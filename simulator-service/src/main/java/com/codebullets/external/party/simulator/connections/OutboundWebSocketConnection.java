@@ -16,12 +16,26 @@
 package com.codebullets.external.party.simulator.connections;
 
 /**
- * Loads connections configured from groovy script configuration.
+ * WebSocket connection connecting to another web socket endpoint.
  */
-public class ConnectionLoader {
-    /**
-     * Loads all connections from configuration and starts them.
-     */
-    public void startAllConnections() {
+public class OutboundWebSocketConnection implements Connection {
+    @Override
+    public void start() {
+    }
+
+    @Override
+    public void setMonitor(final ConnectionMonitor monitor) {
+    }
+
+    @Override
+    public void send(final String text) {
+    }
+
+    @Override
+    public void send(final byte[] buffer) {
+    }
+
+    @Override
+    public void send(final Object object) {
     }
 }
