@@ -15,13 +15,73 @@
  */
 package com.codebullets.external.party.simulator.connections;
 
+import com.codebullets.external.party.simulator.config.Config;
+import com.google.common.collect.Iterables;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Loads connections configured from groovy script configuration.
  */
 public class ConnectionLoader {
+    private static final Logger LOG = LoggerFactory.getLogger(ConnectionLoader.class);
+    private final Config config;
+
+    /**
+     * Generates a new instance of ConnectionLoader.
+     */
+    @Inject
+    public ConnectionLoader(final Config config) {
+        this.config = config;
+    }
+
     /**
      * Loads all connections from configuration and starts them.
      */
     public void startAllConnections() {
+        Iterable<Path> connectionSettings = findAllConnectionSettings();
+
+        ConnectionConfigurator connectionConfigurator = new ConnectionConfigurator();
+        Iterable<ConnectionConfig> connectionConfigs = connectionConfigurator.readConnections(connectionSettings);
+        if (Iterables.isEmpty(connectionConfigs)) {
+            LOG.warn("No connection setting found. Please make sure the configuration is in either the connections sub folder or "
+                + "the 'simulator.connections' system property points to the target location.");
+        }
+
+        printConfig(connectionConfigs);
+    }
+
+    private void printConfig(final Iterable<ConnectionConfig> connectionSettings) {
+        for (ConnectionConfig config : connectionSettings) {
+            LOG.debug("Found connection entry named {}", config.getName());
+        }
+    }
+
+    /**
+     * Returns the list of connection definition files.
+     */
+    private Iterable<Path> findAllConnectionSettings() {
+        List<Path> connectionFiles = new ArrayList<>();
+        Path connectionsDir = config.connectionsPath();
+        LOG.info("Search for files in directory " + connectionsDir);
+
+        try {
+            DirectoryStream<Path> pathEntries = Files.newDirectoryStream(connectionsDir, "*.groovy");
+            for (Path entry : pathEntries) {
+                connectionFiles.add(entry);
+            }
+        } catch (IOException e) {
+            LOG.warn("Error reading files from connections directory: " + e.getMessage());
+        }
+
+        return connectionFiles;
     }
 }
