@@ -34,13 +34,15 @@ import java.util.List;
 public class ConnectionLoader {
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionLoader.class);
     private final Config config;
+    private final ConnectionMonitor connectionMonitor;
 
     /**
      * Generates a new instance of ConnectionLoader.
      */
     @Inject
-    public ConnectionLoader(final Config config) {
+    public ConnectionLoader(final Config config, final ConnectionMonitor connectionMonitor) {
         this.config = config;
+        this.connectionMonitor = connectionMonitor;
     }
 
     /**
@@ -57,11 +59,24 @@ public class ConnectionLoader {
         }
 
         printConfig(connectionConfigs);
+
+        for (ConnectionConfig connectionConfig : connectionConfigs) {
+            startConnection(connectionConfig);
+        }
+    }
+
+    private void startConnection(final ConnectionConfig connectionConfig) {
+        try {
+            connectionConfig.getConnection().setMonitor(connectionMonitor);
+            connectionConfig.getConnection().start(connectionConfig);
+        } catch (Exception ex) {
+            LOG.error("Failed to start connection {}", connectionConfig.getName(), ex);
+        }
     }
 
     private void printConfig(final Iterable<ConnectionConfig> connectionSettings) {
-        for (ConnectionConfig config : connectionSettings) {
-            LOG.debug("Found connection entry named {}", config.getName());
+        for (ConnectionConfig settings : connectionSettings) {
+            LOG.debug("Found connection entry named {}", settings.getName());
         }
     }
 

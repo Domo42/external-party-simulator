@@ -13,14 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.codebullets.external.party.simulator.connections;
+package com.codebullets.external.party.simulator.connections.websocket.outbound;
+
+import com.codebullets.external.party.simulator.connections.Connection;
+import com.codebullets.external.party.simulator.connections.ConnectionConfig;
+import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 
 /**
- * WebSocket connection that waits for clients to connect and send messages.
+ * WebSocket connection connecting to another web socket endpoint.
  */
-public class InboundWebSocketConnection implements Connection {
+public class OutboundWebSocketConnection implements Connection {
     @Override
-    public void start() {
+    public void start(final ConnectionConfig config) {
     }
 
     @Override

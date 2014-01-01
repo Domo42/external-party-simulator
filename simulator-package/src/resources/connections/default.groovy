@@ -4,7 +4,7 @@
  * --------------------------------------------------
  */
 
-import com.codebullets.external.party.simulator.connections.InboundWebSocketConnection
+import com.codebullets.external.party.simulator.connections.websocket.inbound.InboundWebSocketConnection
 
 connection("control", InboundWebSocketConnection) {
     endpoint = "ws://localhost:5353/control"

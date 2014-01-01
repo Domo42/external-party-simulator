@@ -16,13 +16,15 @@
 package com.codebullets.external.party.simulator.connections;
 
 /**
- * Represents a connection, can either be inbound or outbound.
+ * Represents a connection, can either be inbound or outbound.<p/>
+ * Implementations of this interface are expected to have a constructor with with an
+ * empty argument list.
  */
 public interface Connection {
     /**
      * Called when it is time for the connection to be established.
      */
-    void start();
+    void start(ConnectionConfig config);
 
     /**
      * Called by the simulator service. The methods on the injected monitor

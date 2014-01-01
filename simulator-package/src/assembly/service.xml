@@ -50,6 +50,7 @@
                 <include>com.codebullets.saga-lib:saga-lib-guice</include>
                 <include>org.reflections:reflections</include>
                 <include>javassist:javassist</include>
+                <include>io.netty:netty-all</include>
             </includes>
         </dependencySet>
 
