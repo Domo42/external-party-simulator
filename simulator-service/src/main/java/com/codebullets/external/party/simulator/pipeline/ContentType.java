@@ -1,4 +1,4 @@
-package com.codebullets.external.party.simulator.worker;
+package com.codebullets.external.party.simulator.pipeline;
 
 /**
  * Type of a specific message.

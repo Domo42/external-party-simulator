@@ -13,7 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.codebullets.external.party.simulator.worker;
+package com.codebullets.external.party.simulator.pipeline;
+
+import com.codebullets.external.party.simulator.connections.ConnectionContext;
+import com.codebullets.external.party.simulator.worker.WorkItem;
+
+import javax.annotation.Nullable;
 
 import static com.google.common.base.Preconditions.checkState;
 
@@ -24,13 +29,15 @@ public final class MessageWorkItem implements WorkItem {
     private final ContentType contentType;
     private final String messageType;
     private final Object content;
+    private final ConnectionContext connectionContext;
 
     /**
      * Use static builder method to create instance.
      */
-    private MessageWorkItem(final String  text, final String messageType) {
+    private MessageWorkItem(final ConnectionContext connectionContext, final String  text, @Nullable final String messageType) {
         contentType = ContentType.STRING;
         this.messageType = messageType;
+        this.connectionContext = connectionContext;
         content = text;
     }
 
@@ -52,14 +59,29 @@ public final class MessageWorkItem implements WorkItem {
     /**
      * Gets the message instance type.
      */
+    @Nullable
     public String getMessageType() {
         return messageType;
     }
 
     /**
+     * Gets the source connection context.
+     */
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
+    }
+
+    /**
      * Creates a message work item of type String.
      */
-    public static MessageWorkItem create(final String text, final String msgType) {
-        return new MessageWorkItem(text, msgType);
+    public static MessageWorkItem create(final ConnectionContext connectionContext, final String text, @Nullable final String msgType) {
+        return new MessageWorkItem(connectionContext, text, msgType);
+    }
+
+    /**
+     * Creates a message work item of type String.
+     */
+    public static MessageWorkItem create(final ConnectionContext connectionContext, final String text) {
+        return MessageWorkItem.create(connectionContext, text, null);
     }
 }

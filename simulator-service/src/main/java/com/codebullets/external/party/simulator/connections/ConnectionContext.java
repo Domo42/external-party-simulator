@@ -23,4 +23,13 @@ package com.codebullets.external.party.simulator.connections;
  * it triggers a message to be handled.
  */
 public interface ConnectionContext {
+    /**
+     * Gets an identifier of this specific context.
+     */
+    String getId();
+
+    /**
+     * Gets the name of the connection where the context has spawned from.
+     */
+    String getConnectionName();
 }

@@ -16,11 +16,14 @@
 package com.codebullets.external.party.simulator.connections.websocket.inbound;
 
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
+import com.codebullets.external.party.simulator.connections.websocket.NettyConnectionContext;
+import com.codebullets.external.party.simulator.pipeline.MessageWorkItem;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelPromise;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -37,6 +40,7 @@ import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.SocketAddress;
 import java.net.URI;
 
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
@@ -57,15 +61,28 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<Object> {
     private static final Logger LOG = LoggerFactory.getLogger(NettyWebSocketHandler.class);
     private final URI endpoint;
     private final ConnectionMonitor connectionMonitor;
+    private final String connectionName;
+    private NettyConnectionContext context;
 
     private WebSocketServerHandshaker handshaker;
 
     /**
      * Generates a new instance of NettyWebSocketHandler.
      */
-    public NettyWebSocketHandler(final URI endpoint, final ConnectionMonitor connectionMonitor) {
+    public NettyWebSocketHandler(final URI endpoint, final ConnectionMonitor connectionMonitor, final String connectionName) {
         this.endpoint = endpoint;
         this.connectionMonitor = connectionMonitor;
+        this.connectionName = connectionName;
+    }
+
+    @Override
+    public void connect(
+            final ChannelHandlerContext ctx,
+            final SocketAddress remoteAddress,
+            final SocketAddress localAddress,
+            final ChannelPromise promise) throws Exception {
+        context = new NettyConnectionContext(ctx.channel(), connectionName);
+        super.connect(ctx, remoteAddress, localAddress, promise);
     }
 
     @Override
@@ -130,7 +147,8 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<Object> {
             String request = ((TextWebSocketFrame) frame).text();
             LOG.debug("{} received {}", ctx.channel(), request);
 
-            ctx.channel().write(new TextWebSocketFrame(request.toUpperCase()));
+            // ctx.channel().write(new TextWebSocketFrame(request.toUpperCase()));
+            connectionMonitor.messageReceived(MessageWorkItem.create(context, request));
         }
     }
 

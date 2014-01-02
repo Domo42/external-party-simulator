@@ -29,13 +29,15 @@ import java.net.URI;
 public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel> {
     private final URI endpoint;
     private final ConnectionMonitor connectionMonitor;
+    private final String connectionName;
 
     /**
      * Generates a new instance of WebSocketServerInitializer.
      */
-    public WebSocketServerInitializer(final URI endpoint, final ConnectionMonitor connectionMonitor) {
+    public WebSocketServerInitializer(final URI endpoint, final ConnectionMonitor connectionMonitor, final String connectionName) {
         this.endpoint = endpoint;
         this.connectionMonitor = connectionMonitor;
+        this.connectionName = connectionName;
     }
 
     @Override
@@ -43,6 +45,6 @@ public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast("codec-http", new HttpServerCodec());
         pipeline.addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE));
-        pipeline.addLast("handler", new NettyWebSocketHandler(endpoint, connectionMonitor));
+        pipeline.addLast("handler", new NettyWebSocketHandler(endpoint, connectionMonitor, connectionName));
     }
 }

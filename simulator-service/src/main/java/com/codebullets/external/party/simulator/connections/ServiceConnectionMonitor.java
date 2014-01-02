@@ -15,17 +15,31 @@
  */
 package com.codebullets.external.party.simulator.connections;
 
-import com.codebullets.external.party.simulator.worker.MessageWorkItem;
+import com.codebullets.external.party.simulator.pipeline.MessageWorkItem;
+import com.codebullets.external.party.simulator.worker.WorkerQueue;
+
+import javax.inject.Inject;
 
 /**
  * Callback monitor for service connections.
  */
 public class ServiceConnectionMonitor implements ConnectionMonitor {
+    private final WorkerQueue workerQueue;
+
+    /**
+     * Generates a new instance of ServiceConnectionMonitor.
+     */
+    @Inject
+    public ServiceConnectionMonitor(final WorkerQueue workerQueue) {
+        this.workerQueue = workerQueue;
+    }
+
     @Override
     public void connectionEstablished(final ConnectionContext context) {
     }
 
     @Override
-    public void messageReceived(final ConnectionContext context, final MessageWorkItem message) {
+    public void messageReceived(final MessageWorkItem message) {
+        workerQueue.add(message);
     }
 }
