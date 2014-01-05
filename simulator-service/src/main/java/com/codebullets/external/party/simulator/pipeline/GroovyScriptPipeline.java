@@ -16,6 +16,8 @@
 package com.codebullets.external.party.simulator.pipeline;
 
 import com.codebullets.external.party.simulator.connections.ConnectionsContainer;
+import com.codebullets.external.party.simulator.worker.SimulatorStateContainer;
+import com.codebullets.external.party.simulator.worker.WorkerQueue;
 import groovy.lang.GroovyClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,14 +32,22 @@ public class GroovyScriptPipeline implements ScriptPipeline {
 
     private HandlerScriptLoader scriptLoader;
     private final ConnectionsContainer connectionsContainer;
+    private final WorkerQueue queue;
+    private final SimulatorStateContainer state;
 
     /**
      * Generates a new instance of GroovyScriptPipeline.
      */
     @Inject
-    public GroovyScriptPipeline(final HandlerScriptLoader scriptLoader, final ConnectionsContainer connectionsContainer) {
+    public GroovyScriptPipeline(
+            final HandlerScriptLoader scriptLoader,
+            final ConnectionsContainer connectionsContainer,
+            final WorkerQueue queue,
+            final SimulatorStateContainer state) {
         this.scriptLoader = scriptLoader;
         this.connectionsContainer = connectionsContainer;
+        this.queue = queue;
+        this.state = state;
     }
 
     /**
@@ -55,7 +65,9 @@ public class GroovyScriptPipeline implements ScriptPipeline {
 
     private void tryHandleMessage(final AbstractMessageHandler handler, final MessageWorkItem message) {
         try {
+            handler.setWorkerQueue(queue);
             handler.setConnectionContainer(connectionsContainer);
+            handler.setState(state);
             handler.handle(message);
         } catch (Exception e) {
             LOG.error("Error handling message.", e);

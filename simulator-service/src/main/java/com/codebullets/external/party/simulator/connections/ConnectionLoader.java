@@ -41,7 +41,10 @@ public class ConnectionLoader {
      * Generates a new instance of ConnectionLoader.
      */
     @Inject
-    public ConnectionLoader(final Config config, final ConnectionMonitor connectionMonitor, final ConnectionsContainer connectionsContainer) {
+    public ConnectionLoader(
+            final Config config,
+            final ConnectionMonitor connectionMonitor,
+            final ConnectionsContainer connectionsContainer) {
         this.config = config;
         this.connectionMonitor = connectionMonitor;
         this.connectionsContainer = connectionsContainer;
