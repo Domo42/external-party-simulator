@@ -13,21 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.codebullets.external.party.simulator.config;
-
-import java.nio.file.Path;
+package com.codebullets.external.party.simulator.pipeline;
 
 /**
- * Returns configuration information.
+ * Handles a message based on content and type.
  */
-public interface Config {
+public interface ScriptPipeline {
     /**
-     * Returns the location where one or more connection configuration files are located.
+     * Handles a message by calling a list of matching handler scripts.
      */
-    Path connectionsPath();
-
-    /**
-     * Returns the location where the handler script files are located.
-     */
-    Path handlersPath();
+    void handle(MessageWorkItem message);
 }

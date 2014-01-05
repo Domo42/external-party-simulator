@@ -17,6 +17,7 @@ package com.codebullets.external.party.simulator.connections.websocket.outbound;
 
 import com.codebullets.external.party.simulator.connections.Connection;
 import com.codebullets.external.party.simulator.connections.ConnectionConfig;
+import com.codebullets.external.party.simulator.connections.ConnectionContext;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 
 /**
@@ -33,6 +34,10 @@ public class OutboundWebSocketConnection implements Connection {
 
     @Override
     public void send(final String text) {
+    }
+
+    @Override
+    public void send(final ConnectionContext context, final String text) {
     }
 
     @Override

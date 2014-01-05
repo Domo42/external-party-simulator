@@ -48,4 +48,11 @@ public class NettyConnectionContext implements ConnectionContext {
     public String getConnectionName() {
         return connectionName;
     }
+
+    /**
+     * Gets the associated connection channel.
+     */
+    public Channel getChannel() {
+        return channel;
+    }
 }

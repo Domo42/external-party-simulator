@@ -29,15 +29,27 @@ public class ServiceConfig implements Config {
      */
     @Override
     public Path connectionsPath() {
-        Path connectionsPath;
+        return getPath("simulator.connections", "connections");
+    }
 
-        String configVal = System.getProperty("simulator.connections");
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Path handlersPath() {
+        return getPath("simulator.handlers", "handlers");
+    }
+
+    private Path getPath(final String property, final String defaultVal) {
+        Path path;
+
+        String configVal = System.getProperty(property);
         if (configVal != null) {
-            connectionsPath = Paths.get(configVal);
+            path = Paths.get(configVal);
         } else {
-            connectionsPath = Paths.get(StandardSystemProperty.USER_DIR.value());
+            path = Paths.get(StandardSystemProperty.USER_DIR.value(), defaultVal);
         }
 
-        return connectionsPath;
+        return path;
     }
 }

@@ -17,11 +17,14 @@ package com.codebullets.external.party.simulator.connections.websocket.inbound;
 
 import com.codebullets.external.party.simulator.connections.Connection;
 import com.codebullets.external.party.simulator.connections.ConnectionConfig;
+import com.codebullets.external.party.simulator.connections.ConnectionContext;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
+import com.codebullets.external.party.simulator.connections.websocket.NettyConnectionContext;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,6 +71,16 @@ public class InboundWebSocketConnection implements Connection {
 
     @Override
     public void send(final String text) {
+    }
+
+    @Override
+    public void send(final ConnectionContext context, final String text) {
+        if (context instanceof NettyConnectionContext) {
+            NettyConnectionContext nettyContext = (NettyConnectionContext) context;
+            nettyContext.getChannel().writeAndFlush(new TextWebSocketFrame(text));
+        } else {
+            LOG.warn("Expected context of type NettyConnectionContext, but was " + context.getClass().getSimpleName());
+        }
     }
 
     @Override

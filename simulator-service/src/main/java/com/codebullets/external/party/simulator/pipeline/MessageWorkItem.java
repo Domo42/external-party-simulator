@@ -35,7 +35,7 @@ public final class MessageWorkItem implements WorkItem {
      * Use static builder method to create instance.
      */
     private MessageWorkItem(final ConnectionContext connectionContext, final String  text, @Nullable final String messageType) {
-        contentType = ContentType.STRING;
+        contentType = ContentType.TEXT;
         this.messageType = messageType;
         this.connectionContext = connectionContext;
         content = text;
@@ -52,7 +52,7 @@ public final class MessageWorkItem implements WorkItem {
      * Gets the text content in case message is of type text.
      */
     public String textContent() {
-        checkState(contentType.equals(ContentType.STRING), "Message content needs to be of type STRING.");
+        checkState(contentType.equals(ContentType.TEXT), "Message content needs to be of type TEXT.");
         return (String) content;
     }
 

@@ -23,7 +23,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelPromise;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
@@ -40,7 +39,6 @@ import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.SocketAddress;
 import java.net.URI;
 
 import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
@@ -73,16 +71,6 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<Object> {
         this.endpoint = endpoint;
         this.connectionMonitor = connectionMonitor;
         this.connectionName = connectionName;
-    }
-
-    @Override
-    public void connect(
-            final ChannelHandlerContext ctx,
-            final SocketAddress remoteAddress,
-            final SocketAddress localAddress,
-            final ChannelPromise promise) throws Exception {
-        context = new NettyConnectionContext(ctx.channel(), connectionName);
-        super.connect(ctx, remoteAddress, localAddress, promise);
     }
 
     @Override
@@ -146,9 +134,7 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<Object> {
             // Send the uppercase string back.
             String request = ((TextWebSocketFrame) frame).text();
             LOG.debug("{} received {}", ctx.channel(), request);
-
-            // ctx.channel().write(new TextWebSocketFrame(request.toUpperCase()));
-            connectionMonitor.messageReceived(MessageWorkItem.create(context, request));
+            connectionMonitor.messageReceived(MessageWorkItem.create(getContext(ctx), request));
         }
     }
 
@@ -166,6 +152,14 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<Object> {
         if (!isKeepAlive(req) || res.getStatus().code() != HttpResponseStatus.OK.code()) {
             f.addListener(ChannelFutureListener.CLOSE);
         }
+    }
+
+    private NettyConnectionContext getContext(final ChannelHandlerContext ctx) {
+        if (context == null) {
+            context = new NettyConnectionContext(ctx.channel(), connectionName);
+        }
+
+        return context;
     }
 
     @Override

@@ -32,10 +32,17 @@ public interface Connection {
      */
     void setMonitor(ConnectionMonitor monitor);
 
-   /**
+    /**
      * Sends a single text string over the connection.
      */
     void send(String text);
+
+    /**
+     * Sends a single text string over the connection. This
+     * message is sent as part of a specific context. For example sending
+     * a message back only a single client attached to single connection.
+     */
+    void send(ConnectionContext context, String text);
 
     /**
      * Sends a buffer of bytes over the connection.

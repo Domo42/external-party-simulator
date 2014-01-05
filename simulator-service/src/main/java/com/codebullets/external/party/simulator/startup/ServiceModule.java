@@ -22,6 +22,9 @@ import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import com.codebullets.external.party.simulator.connections.ConnectionsContainer;
 import com.codebullets.external.party.simulator.connections.ServiceConnectionMonitor;
 import com.codebullets.external.party.simulator.connections.SimulatorConnectionsContainer;
+import com.codebullets.external.party.simulator.pipeline.GroovyScriptPipeline;
+import com.codebullets.external.party.simulator.pipeline.HandlerScriptLoader;
+import com.codebullets.external.party.simulator.pipeline.ScriptPipeline;
 import com.codebullets.external.party.simulator.worker.ServiceWorkerQueue;
 import com.codebullets.external.party.simulator.worker.WorkerQueue;
 import com.google.inject.AbstractModule;
@@ -42,6 +45,8 @@ public class ServiceModule extends AbstractModule {
         bind(ConnectionsContainer.class).to(SimulatorConnectionsContainer.class).in(Singleton.class);
         bind(ConnectionMonitor.class).to(ServiceConnectionMonitor.class).in(Singleton.class);
         bind(ConnectionLoader.class).in(Singleton.class);
+        bind(HandlerScriptLoader.class).in(Singleton.class);
+        bind(ScriptPipeline.class).to(GroovyScriptPipeline.class).in(Singleton.class);
         bind(Config.class).to(ServiceConfig.class);
     }
 }

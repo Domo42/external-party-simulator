@@ -35,14 +35,16 @@ public class ConnectionLoader {
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionLoader.class);
     private final Config config;
     private final ConnectionMonitor connectionMonitor;
+    private final ConnectionsContainer connectionsContainer;
 
     /**
      * Generates a new instance of ConnectionLoader.
      */
     @Inject
-    public ConnectionLoader(final Config config, final ConnectionMonitor connectionMonitor) {
+    public ConnectionLoader(final Config config, final ConnectionMonitor connectionMonitor, final ConnectionsContainer connectionsContainer) {
         this.config = config;
         this.connectionMonitor = connectionMonitor;
+        this.connectionsContainer = connectionsContainer;
     }
 
     /**
@@ -69,6 +71,8 @@ public class ConnectionLoader {
         try {
             connectionConfig.getConnection().setMonitor(connectionMonitor);
             connectionConfig.getConnection().start(connectionConfig);
+
+            connectionsContainer.put(connectionConfig.getName(), connectionConfig.getConnection());
         } catch (Exception ex) {
             LOG.error("Failed to start connection {}", connectionConfig.getName(), ex);
         }
@@ -88,8 +92,7 @@ public class ConnectionLoader {
         Path connectionsDir = config.connectionsPath();
         LOG.info("Search for files in directory " + connectionsDir);
 
-        try {
-            DirectoryStream<Path> pathEntries = Files.newDirectoryStream(connectionsDir, "*.groovy");
+        try (DirectoryStream<Path> pathEntries = Files.newDirectoryStream(connectionsDir, "*.groovy")) {
             for (Path entry : pathEntries) {
                 connectionFiles.add(entry);
             }

@@ -10,9 +10,9 @@ public enum ContentType {
     BINARY,
 
     /**
-     * Message content is a string.
+     * Message content is a text string.
      */
-    STRING,
+    TEXT,
 
     /**
      * Message content is a Java object.
