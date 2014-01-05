@@ -21,9 +21,12 @@ import com.codebullets.external.party.simulator.connections.ConnectionContext;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import com.codebullets.external.party.simulator.connections.websocket.NettyConnectionContext;
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,10 +72,18 @@ public class InboundWebSocketConnection implements Connection {
         connectionMonitor = monitor;
     }
 
+    /**
+     * Operation not supported on inbound connection. Use {@link #send(com.codebullets.external.party.simulator.connections.ConnectionContext, String)}
+     * instead.
+     */
     @Override
     public void send(final String text) {
+        throw new UnsupportedOperationException("Sending is only possible for an inbound connection when the inbound connection context is specified.");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void send(final ConnectionContext context, final String text) {
         if (context instanceof NettyConnectionContext) {
@@ -83,11 +94,42 @@ public class InboundWebSocketConnection implements Connection {
         }
     }
 
+    /**
+     * Operation not supported without connection context. Use {@link #send(com.codebullets.external.party.simulator.connections.ConnectionContext, byte[])}
+     * instead.
+     */
     @Override
     public void send(final byte[] buffer) {
+        throw new UnsupportedOperationException("Sending is only possible for an inbound connection when the inbound connection context is specified.");
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void send(final ConnectionContext context, final byte[] buffer) {
+        if (context instanceof NettyConnectionContext) {
+            NettyConnectionContext nettyContext = (NettyConnectionContext) context;
+            ByteBuf binaryData = Unpooled.wrappedBuffer(buffer);
+            nettyContext.getChannel().writeAndFlush(new BinaryWebSocketFrame(binaryData));
+        } else {
+            LOG.warn("Expected context of type NettyConnectionContext, but was " + context.getClass().getSimpleName());
+        }
+    }
+
+    /**
+     * Sending of Java objects not supported on websocket connection.
+     */
     @Override
     public void send(final Object object) {
+        throw new UnsupportedOperationException("Send of plain Java objects not supported on websocket connection.");
+    }
+
+    /**
+     * Sending of Java objects not supported on websocket connection.
+     */
+    @Override
+    public void send(final ConnectionContext context, final Object object) {
+        throw new UnsupportedOperationException("Send of plain Java objects not supported on websocket connection.");
     }
 }

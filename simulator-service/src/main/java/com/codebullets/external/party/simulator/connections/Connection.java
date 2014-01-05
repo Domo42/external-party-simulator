@@ -50,7 +50,21 @@ public interface Connection {
     void send(byte[] buffer);
 
     /**
+     * Sends a buffer of bytes over the connection. This
+     * message is sent as part of a specific context. For example sending
+     * a message back only a single client attached to single connection.
+     */
+    void send(ConnectionContext context, byte[] buffer);
+
+    /**
      * Sends any kind of object over the connection.
      */
     void send(Object object);
+
+    /**
+     * Sends any kind of object over the connection. This
+     * message is sent as part of a specific context. For example sending
+     * a message back only a single client attached to single connection.
+     */
+    void send(ConnectionContext context, Object object);
 }

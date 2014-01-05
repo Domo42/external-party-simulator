@@ -34,11 +34,12 @@ public final class MessageWorkItem implements WorkItem {
     /**
      * Use static builder method to create instance.
      */
-    private MessageWorkItem(final ConnectionContext connectionContext, final String  text, @Nullable final String messageType) {
-        contentType = ContentType.TEXT;
+    private MessageWorkItem(final ConnectionContext connectionContext, final Object content, final ContentType contentType,
+                            @Nullable final String messageType) {
+        this.contentType = ContentType.TEXT;
         this.messageType = messageType;
         this.connectionContext = connectionContext;
-        content = text;
+        this.content = content;
     }
 
     /**
@@ -54,6 +55,20 @@ public final class MessageWorkItem implements WorkItem {
     public String textContent() {
         checkState(contentType.equals(ContentType.TEXT), "Message content needs to be of type TEXT.");
         return (String) content;
+    }
+
+    /**
+     * Gets the binary content in case message is of type binary.
+     */
+    public byte[] binaryContent() {
+        return (byte[]) content;
+    }
+
+    /**
+     * Gets the Java object content.
+     */
+    public Object objectContent() {
+        return content;
     }
 
     /**
@@ -75,7 +90,7 @@ public final class MessageWorkItem implements WorkItem {
      * Creates a message work item of type String.
      */
     public static MessageWorkItem create(final ConnectionContext connectionContext, final String text, @Nullable final String msgType) {
-        return new MessageWorkItem(connectionContext, text, msgType);
+        return new MessageWorkItem(connectionContext, text, ContentType.TEXT, msgType);
     }
 
     /**
@@ -83,5 +98,33 @@ public final class MessageWorkItem implements WorkItem {
      */
     public static MessageWorkItem create(final ConnectionContext connectionContext, final String text) {
         return MessageWorkItem.create(connectionContext, text, null);
+    }
+
+    /**
+     * Creates a message work item of type binary.
+     */
+    public static MessageWorkItem create(final ConnectionContext connectionContext, final byte[] buffer, @Nullable final String msgType) {
+        return new MessageWorkItem(connectionContext, buffer, ContentType.BINARY, msgType);
+    }
+
+    /**
+     * Creates a message work item of type binary.
+     */
+    public static MessageWorkItem create(final ConnectionContext connectionContext, final byte[] buffer) {
+        return MessageWorkItem.create(connectionContext, buffer, null);
+    }
+
+    /**
+     * Creates a message work item of type object.
+     */
+    public static MessageWorkItem create(final ConnectionContext connectionContext, final Object obj, @Nullable final String msgType) {
+        return new MessageWorkItem(connectionContext, obj, ContentType.OBJECT, msgType);
+    }
+
+    /**
+     * Creates a message work item of type object.
+     */
+    public static MessageWorkItem create(final ConnectionContext connectionContext, final Object obj) {
+        return MessageWorkItem.create(connectionContext, obj, null);
     }
 }

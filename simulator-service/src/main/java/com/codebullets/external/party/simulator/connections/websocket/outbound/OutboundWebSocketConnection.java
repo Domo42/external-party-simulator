@@ -45,6 +45,14 @@ public class OutboundWebSocketConnection implements Connection {
     }
 
     @Override
+    public void send(final ConnectionContext context, final byte[] buffer) {
+    }
+
+    @Override
     public void send(final Object object) {
+    }
+
+    @Override
+    public void send(final ConnectionContext context, final Object object) {
     }
 }
