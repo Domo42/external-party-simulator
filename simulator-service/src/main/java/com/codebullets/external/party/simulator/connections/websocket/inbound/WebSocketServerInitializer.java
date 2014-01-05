@@ -15,36 +15,44 @@
  */
 package com.codebullets.external.party.simulator.connections.websocket.inbound;
 
+import com.codebullets.external.party.simulator.connections.ConnectionConfig;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 /**
  */
 public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel> {
+    private static final long DEFAULT_TIMEOUT = TimeUnit.SECONDS.toMillis(30);
+
     private final URI endpoint;
     private final ConnectionMonitor connectionMonitor;
-    private final String connectionName;
+    private final ConnectionConfig connectionConfig;
 
     /**
      * Generates a new instance of WebSocketServerInitializer.
      */
-    public WebSocketServerInitializer(final URI endpoint, final ConnectionMonitor connectionMonitor, final String connectionName) {
+    public WebSocketServerInitializer(final URI endpoint, final ConnectionMonitor connectionMonitor, final ConnectionConfig connectionConfig) {
         this.endpoint = endpoint;
         this.connectionMonitor = connectionMonitor;
-        this.connectionName = connectionName;
+        this.connectionConfig = connectionConfig;
     }
 
     @Override
     public void initChannel(final SocketChannel ch) throws Exception {
+        long timeoutVal = connectionConfig.getTimeout() > 0 ? connectionConfig.getTimeout() : DEFAULT_TIMEOUT;
+
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast("codec-http", new HttpServerCodec());
+        pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(timeoutVal, TimeUnit.MILLISECONDS));
         pipeline.addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE));
-        pipeline.addLast("handler", new NettyWebSocketHandler(endpoint, connectionMonitor, connectionName));
+        pipeline.addLast("handler", new NettyWebSocketHandler(endpoint, connectionMonitor, connectionConfig.getName()));
     }
 }

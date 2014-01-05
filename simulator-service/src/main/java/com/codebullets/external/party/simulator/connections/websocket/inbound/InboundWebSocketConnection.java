@@ -54,7 +54,7 @@ public class InboundWebSocketConnection implements Connection {
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new WebSocketServerInitializer(endpoint, connectionMonitor, config.getName()));
+                .childHandler(new WebSocketServerInitializer(endpoint, connectionMonitor, config));
 
         try {
             serverBootstrap.bind(endpoint.getPort()).sync().channel();
