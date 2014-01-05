@@ -56,8 +56,8 @@ import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
  * Handles web socket frames being received.<p/>
  * Parts of this class are based on the WebSocketServerHandler class from netty examples.
  */
-public class NettyWebSocketHandler extends SimpleChannelInboundHandler<Object> {
-    private static final Logger LOG = LoggerFactory.getLogger(NettyWebSocketHandler.class);
+public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Object> {
+    private static final Logger LOG = LoggerFactory.getLogger(NettyWebSocketServerHandler.class);
     private final URI endpoint;
     private final ConnectionMonitor connectionMonitor;
     private final String connectionName;
@@ -66,9 +66,9 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<Object> {
     private WebSocketServerHandshaker handshaker;
 
     /**
-     * Generates a new instance of NettyWebSocketHandler.
+     * Generates a new instance of NettyWebSocketServerHandler.
      */
-    public NettyWebSocketHandler(final URI endpoint, final ConnectionMonitor connectionMonitor, final String connectionName) {
+    public NettyWebSocketServerHandler(final URI endpoint, final ConnectionMonitor connectionMonitor, final String connectionName) {
         this.endpoint = endpoint;
         this.connectionMonitor = connectionMonitor;
         this.connectionName = connectionName;

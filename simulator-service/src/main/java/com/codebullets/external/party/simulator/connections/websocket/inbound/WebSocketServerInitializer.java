@@ -53,6 +53,6 @@ public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel
         pipeline.addLast("codec-http", new HttpServerCodec());
         pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(timeoutVal, TimeUnit.MILLISECONDS));
         pipeline.addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE));
-        pipeline.addLast("handler", new NettyWebSocketHandler(endpoint, connectionMonitor, connectionConfig.getName()));
+        pipeline.addLast("handler", new NettyWebSocketServerHandler(endpoint, connectionMonitor, connectionConfig.getName()));
     }
 }

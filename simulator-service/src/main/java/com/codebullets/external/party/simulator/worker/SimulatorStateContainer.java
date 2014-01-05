@@ -42,6 +42,14 @@ public class SimulatorStateContainer {
     }
 
     /**
+     * Removes key and value from the simulator state.
+     * @return Returns the stored value; or null if no value was associated with the given key.
+     */
+    public Object remove(final String key) {
+        return state.remove(key);
+    }
+
+    /**
      * Returns true if a value for a specific key is present; otherwise false.
      */
     public boolean containsKey(final String key) {
