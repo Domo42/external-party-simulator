@@ -26,7 +26,7 @@ import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
 import io.netty.handler.codec.http.websocketx.WebSocketVersion;
-import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.IdleStateHandler;
 
 import java.net.URI;
 import java.util.concurrent.TimeUnit;
@@ -35,33 +35,41 @@ import java.util.concurrent.TimeUnit;
  * Initializer for the outbound websocket client.
  */
 public class WebSocketClientInitializer extends ChannelInitializer<SocketChannel> {
-    private static final long DEFAULT_TIMEOUT = TimeUnit.SECONDS.toMillis(30);
-
     private final ConnectionMonitor connectionMonitor;
     private final ConnectionConfig connectionConfig;
+    private final OutboundWebSocketConnection outboundWebSocketConnection;
 
     /**
      * Generates a new instance of WebSocketServerInitializer.
      */
-    public WebSocketClientInitializer(final ConnectionMonitor connectionMonitor, final ConnectionConfig connectionConfig) {
+    public WebSocketClientInitializer(
+            final ConnectionMonitor connectionMonitor,
+            final ConnectionConfig connectionConfig,
+            final OutboundWebSocketConnection outboundWebSocketConnection) {
         this.connectionMonitor = connectionMonitor;
         this.connectionConfig = connectionConfig;
+        this.outboundWebSocketConnection = outboundWebSocketConnection;
     }
 
     @Override
     public void initChannel(final SocketChannel ch) throws Exception {
-        long timeoutVal = connectionConfig.getTimeout() > 0 ? connectionConfig.getTimeout() : DEFAULT_TIMEOUT;
-        HttpHeaders customHeaders = new DefaultHttpHeaders();
-        customHeaders.add("MyHeader", "MyValue");
+        HttpHeaders headers = new DefaultHttpHeaders();
+
+        // Use half of the timeout for ping if there is no other traffic.
+        // if timeoutSec is very small (<1s) then pingTimeout will be 0 which
+        // disables it in the IdleStateHandler
+        long timeoutSec = TimeUnit.MILLISECONDS.toSeconds(connectionConfig.getTimeout());
+        long pingTimeout = timeoutSec / 2;
 
         ChannelPipeline pipeline = ch.pipeline();
         pipeline.addLast("http-codec", new HttpClientCodec());
-        pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(timeoutVal, TimeUnit.MILLISECONDS));
         pipeline.addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE));
+        pipeline.addLast("idleStateHandler", new IdleStateHandler((int) timeoutSec, (int) pingTimeout, 0));
+        pipeline.addLast("keepAliveHandler", new KeepAliveHandler(outboundWebSocketConnection));
         pipeline.addLast("handler",
                 new NettyWebSocketClientHandler(
                         WebSocketClientHandshakerFactory.newHandshaker(
-                            URI.create(connectionConfig.getEndpoint()), WebSocketVersion.V13, null, false, customHeaders),
+                            URI.create(connectionConfig.getEndpoint()), WebSocketVersion.V13, null, false, headers),
                         connectionMonitor,
                         connectionConfig.getName()));
     }
