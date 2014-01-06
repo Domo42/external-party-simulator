@@ -29,6 +29,16 @@
             <outputDirectory>/config</outputDirectory>
             <directory>/src/resources/config</directory>
         </fileSet>
+
+        <fileSet>
+            <outputDirectory>/connections</outputDirectory>
+            <directory>/src/resources/connections</directory>
+        </fileSet>
+
+        <fileSet>
+            <outputDirectory>/handlers</outputDirectory>
+            <directory>/src/resources/handlers</directory>
+        </fileSet>
     </fileSets>
 
     <dependencySets>
