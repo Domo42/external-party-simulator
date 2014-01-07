@@ -36,7 +36,7 @@ public final class MessageWorkItem implements WorkItem {
      */
     private MessageWorkItem(final ConnectionContext connectionContext, final Object content, final ContentType contentType,
                             @Nullable final String messageType) {
-        this.contentType = ContentType.TEXT;
+        this.contentType = contentType;
         this.messageType = messageType;
         this.connectionContext = connectionContext;
         this.content = content;
