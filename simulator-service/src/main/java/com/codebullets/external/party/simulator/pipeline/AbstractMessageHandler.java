@@ -42,7 +42,7 @@ public abstract class AbstractMessageHandler {
      * also contain glob wildcards ('*', '?') to register for a range of matching types.
      */
     @Nullable
-    public abstract String messageType();
+    public abstract String getMessageType();
 
     /**
      * This method is called for the handler to perform its logic.
@@ -59,7 +59,7 @@ public abstract class AbstractMessageHandler {
     /**
      * Gets a container holding all available connections.
      */
-    public ConnectionsContainer getConnectionContainer() {
+    public ConnectionsContainer getConnections() {
         return connections;
     }
 

@@ -60,14 +60,14 @@ public final class MessageWorkItem implements WorkItem {
     /**
      * Gets the binary content in case message is of type binary.
      */
-    public byte[] binaryContent() {
+    public byte[] getBinaryContent() {
         return (byte[]) content;
     }
 
     /**
      * Gets the Java object content.
      */
-    public Object objectContent() {
+    public Object getObjectContent() {
         return content;
     }
 

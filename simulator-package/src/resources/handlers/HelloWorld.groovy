@@ -11,7 +11,7 @@ class HelloWorldHandler extends AbstractMessageHandler {
     }
 
     @Override
-    String messageType() {
+    String getMessageType() {
         return null
     }
 

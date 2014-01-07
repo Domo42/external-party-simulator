@@ -66,7 +66,7 @@ public class HandlerScriptLoader {
         boolean isMatch = false;
 
         if (messageContentType.equals(handler.getContentType())) {
-            GlobMatcher matcher = new GlobMatcher(handler.messageType());
+            GlobMatcher matcher = new GlobMatcher(handler.getMessageType());
             if (matcher.isMatch(messageType)) {
                 isMatch = true;
             }
