@@ -41,7 +41,6 @@ import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import com.codebullets.external.party.simulator.connections.websocket.NettyConnectionContext;
 import com.codebullets.external.party.simulator.pipeline.MessageWorkItem;
 import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -78,13 +77,6 @@ public class NettyWebSocketClientHandler extends SimpleChannelInboundHandler<Obj
         this.connectionName = connectionName;
     }
 
-    /**
-     * Future indicating when the websocket handshake is complete.
-     */
-    public ChannelFuture handshakeFuture() {
-        return handshakeFuture;
-    }
-
     @Override
     public void handlerAdded(final ChannelHandlerContext ctx) throws Exception {
         handshakeFuture = ctx.newPromise();
@@ -106,6 +98,7 @@ public class NettyWebSocketClientHandler extends SimpleChannelInboundHandler<Obj
         if (!handshaker.isHandshakeComplete()) {
             handshaker.finishHandshake(ch, (FullHttpResponse) msg);
             LOG.info("WebSocket client {} connected.", connectionName);
+            connectionMonitor.connectionEstablished(getContext(ctx));
             handshakeFuture.setSuccess();
             return;
         }

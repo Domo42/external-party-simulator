@@ -19,9 +19,8 @@ class HelloWorldHandler extends AbstractMessageHandler {
     void handle(final MessageWorkItem messageItem) {
         // in case message is the test hello world text, send back the
         // message in upper case letters
-        if (messageItem.textContent().equals("Hello, World!")) {
-            Connection callingConnection = getConnection(messageItem.connectionContext)
-            callingConnection.send(messageItem.connectionContext, messageItem.textContent().toUpperCase())
+        if (messageItem.textContent == "Hello, World!") {
+            sendTo(messageItem.connectionContext, messageItem.textContent.toUpperCase())
         }
     }
 }

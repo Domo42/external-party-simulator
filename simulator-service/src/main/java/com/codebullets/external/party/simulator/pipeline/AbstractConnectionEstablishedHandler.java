@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stefan Domnanovits
+ * Copyright 2014 Stefan Domnanovits
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,11 @@
 package com.codebullets.external.party.simulator.pipeline;
 
 /**
- * Handles a message based on content and type.
+ * Base class for handlers interested in connection established events.
  */
-public interface ScriptPipeline {
+public abstract class AbstractConnectionEstablishedHandler extends AbstractHandler {
     /**
-     * Handles a message by calling a list of matching handler scripts.
+     * This method is called for the handler to perform its logic.
      */
-    void handle(MessageWorkItem message);
-
-    /**
-     * Handles the established connection indication by calling a list of matching handler scripts.
-     */
-    void handle(ConnectionEstablishedWorkItem establishedMessage);
+    public abstract void handle(final ConnectionEstablishedWorkItem establishedItem);
 }

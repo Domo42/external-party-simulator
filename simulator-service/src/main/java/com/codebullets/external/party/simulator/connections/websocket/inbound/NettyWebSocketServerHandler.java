@@ -75,6 +75,12 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Obj
     }
 
     @Override
+    public void channelActive(final ChannelHandlerContext ctx) throws Exception {
+        connectionMonitor.connectionEstablished(getContext(ctx));
+        super.channelActive(ctx);
+    }
+
+    @Override
     public void messageReceived(final ChannelHandlerContext ctx, final Object msg) throws Exception {
         if (msg instanceof FullHttpRequest) {
             handleHttpRequest(ctx, (FullHttpRequest) msg);
@@ -167,7 +173,7 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Obj
 
     @Override
     public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) throws Exception {
-        LOG.warn("Exception handling web socket message.", cause);
+        LOG.warn("Exception on web socket server channel name={}, id={}.", connectionName, ctx.channel().id(), cause);
         ctx.close();
     }
 }

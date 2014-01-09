@@ -56,17 +56,41 @@ public class GroovyScriptPipeline implements ScriptPipeline {
     @Override
     public void handle(final MessageWorkItem message) {
         GroovyClassLoader classLoader = new GroovyClassLoader(this.getClass().getClassLoader());
-        Iterable<AbstractMessageHandler> handlers = scriptLoader.loadMatchingSciptHandlers(message, classLoader);
+        Iterable<AbstractMessageHandler> handlers = scriptLoader.loadMatchingScriptHandlers(message, classLoader);
 
         for (AbstractMessageHandler handler : handlers) {
             tryHandleMessage(handler, message);
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void handle(final ConnectionEstablishedWorkItem establishedMessage) {
+        GroovyClassLoader classLoader = new GroovyClassLoader(this.getClass().getClassLoader());
+        Iterable<AbstractConnectionEstablishedHandler> handlers = scriptLoader.loadMatchingScriptHandlers(establishedMessage, classLoader);
+
+        for (AbstractConnectionEstablishedHandler handler : handlers) {
+            tryHandleMessage(handler, establishedMessage);
+        }
+    }
+
     private void tryHandleMessage(final AbstractMessageHandler handler, final MessageWorkItem message) {
         try {
             handler.setWorkerQueue(queue);
-            handler.setConnectionContainer(connectionsContainer);
+            handler.setConnections(connectionsContainer);
+            handler.setState(state);
+            handler.handle(message);
+        } catch (Exception e) {
+            LOG.error("Error handling message.", e);
+        }
+    }
+
+    private void tryHandleMessage(final AbstractConnectionEstablishedHandler handler, final ConnectionEstablishedWorkItem message) {
+        try {
+            handler.setWorkerQueue(queue);
+            handler.setConnections(connectionsContainer);
             handler.setState(state);
             handler.handle(message);
         } catch (Exception e) {

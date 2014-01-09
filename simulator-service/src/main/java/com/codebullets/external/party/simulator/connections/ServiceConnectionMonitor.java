@@ -15,6 +15,7 @@
  */
 package com.codebullets.external.party.simulator.connections;
 
+import com.codebullets.external.party.simulator.pipeline.ConnectionEstablishedWorkItem;
 import com.codebullets.external.party.simulator.pipeline.MessageWorkItem;
 import com.codebullets.external.party.simulator.worker.WorkerQueue;
 
@@ -36,6 +37,7 @@ public class ServiceConnectionMonitor implements ConnectionMonitor {
 
     @Override
     public void connectionEstablished(final ConnectionContext context) {
+        workerQueue.add(new ConnectionEstablishedWorkItem(context));
     }
 
     @Override

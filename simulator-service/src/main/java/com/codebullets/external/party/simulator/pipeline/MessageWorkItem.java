@@ -52,7 +52,7 @@ public final class MessageWorkItem implements WorkItem {
     /**
      * Gets the text content in case message is of type text.
      */
-    public String textContent() {
+    public String getTextContent() {
         checkState(contentType.equals(ContentType.TEXT), "Message content needs to be of type TEXT.");
         return (String) content;
     }

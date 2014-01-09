@@ -9,7 +9,7 @@ import com.codebullets.external.party.simulator.connections.websocket.outbound.O
 
 connection("control", InboundWebSocketConnection) {
     endpoint = "ws://localhost:5353/control"
-    timeout = 30_000
+    timeout = 300_000
 }
 
 // loopback connection to simulator control port for testing
