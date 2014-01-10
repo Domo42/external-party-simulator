@@ -15,9 +15,11 @@
  */
 package com.codebullets.external.party.simulator.connections;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Stores a list of service connections.
@@ -33,12 +35,67 @@ public class SimulatorConnectionsContainer implements ConnectionsContainer {
         return connections.get(refName);
     }
 
+    @Override
+    public int size() {
+        return connections.size();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return connections.isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(final Object key) {
+        return connections.containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(final Object value) {
+        return connections.containsValue(value);
+    }
+
+    @Override
+    public Connection get(final Object key) {
+        return connections.get(key);
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
-    public void put(final String refName, final Connection connection) {
-        connections.put(refName, connection);
+    public Connection put(final String refName, final Connection connection) {
+        return connections.put(refName, connection);
+    }
+
+    @Override
+    public Connection remove(final Object key) {
+        return connections.remove(key);
+    }
+
+    @Override
+    public void putAll(final Map<? extends String, ? extends Connection> m) {
+        connections.putAll(m);
+    }
+
+    @Override
+    public void clear() {
+        connections.clear();
+    }
+
+    @Override
+    public Set<String> keySet() {
+        return connections.keySet();
+    }
+
+    @Override
+    public Collection<Connection> values() {
+        return connections.values();
+    }
+
+    @Override
+    public Set<Entry<String, Connection>> entrySet() {
+        return connections.entrySet();
     }
 
     /**

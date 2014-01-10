@@ -15,11 +15,13 @@
  */
 package com.codebullets.external.party.simulator.connections;
 
+import java.util.Map;
+
 /**
  * Holds a list of available service connections. Connections
  * are referenced by name.
  */
-public interface ConnectionsContainer {
+public interface ConnectionsContainer extends Map<String, Connection> {
     /**
      * Gets a connection with a specific reference name. If
      * the connection does not exist null is returned.
@@ -29,7 +31,7 @@ public interface ConnectionsContainer {
     /**
      * Add a connection to the container.
      */
-    void put(String refName, Connection connection);
+    Connection put(String refName, Connection connection);
 
     /**
      * Removes a connection from the container.
