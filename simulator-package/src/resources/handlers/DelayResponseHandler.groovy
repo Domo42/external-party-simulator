@@ -4,6 +4,12 @@ import com.codebullets.external.party.simulator.pipeline.MessageWorkItem
 
 import java.util.concurrent.TimeUnit
 
+/**
+ * This handler listens for incoming text messages containing purely
+ * of digits.<br/>
+ * Once such a message is detected it schedules another message item
+ * which will be executed after the number of seconds specified
+ */
 class DelayResponseHandler extends AbstractMessageHandler {
 
     @Override
