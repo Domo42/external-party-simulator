@@ -15,6 +15,8 @@
  */
 package com.codebullets.external.party.simulator.worker;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * FIFO Worker queue where items can be added or taken to be processed.
  */
@@ -23,6 +25,14 @@ public interface WorkerQueue {
      * Add an item into the worker queue.
      */
     void add(WorkItem item);
+
+    /**
+     * Adds an item into the worker queue. The item is not handled immediately.
+     * The item is handled after the defined time span has passed. Calling
+     * this method will not delay other items added to the queue with no or shorter
+     * delayed handling time.
+     */
+    void addDelayed(WorkItem item, long delay, TimeUnit unit);
 
     /**
      * Takes an item from the worker queue. Blocks if no item present.

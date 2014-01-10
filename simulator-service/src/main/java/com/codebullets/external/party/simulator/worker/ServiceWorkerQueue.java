@@ -17,12 +17,15 @@ package com.codebullets.external.party.simulator.worker;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Holds the work items for the simulator service.
  */
 public class ServiceWorkerQueue implements WorkerQueue {
     private final BlockingQueue<WorkItem> workItems = new LinkedBlockingQueue<>();
+    private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 
     /**
      * {@inheritDoc}
@@ -30,6 +33,22 @@ public class ServiceWorkerQueue implements WorkerQueue {
     @Override
     public void add(final WorkItem item) {
         workItems.add(item);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addDelayed(final WorkItem item, final long delay, final TimeUnit unit) {
+        executor.schedule(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        workItems.add(item);
+                    }
+                },
+                delay,
+                unit);
     }
 
     /**
