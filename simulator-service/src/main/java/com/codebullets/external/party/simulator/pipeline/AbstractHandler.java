@@ -43,7 +43,7 @@ public abstract class AbstractHandler {
     /**
      * Called by the simulator framework to set the queue.
      */
-    protected void setWorkerQueue(final WorkerQueue queue) {
+    protected final void setWorkerQueue(final WorkerQueue queue) {
         workerQueue = queue;
     }
 
@@ -51,28 +51,28 @@ public abstract class AbstractHandler {
      * Gets the simulator worker queue. This queue can be used to enqueue additional
      * {@link MessageReceivedEvent} for further processing.
      */
-    public WorkerQueue getWorkerQueue() {
+    public final WorkerQueue getWorkerQueue() {
         return workerQueue;
     }
 
     /**
      * Gets a container holding all available connections.
      */
-    public ConnectionsContainer getConnections() {
+    public final ConnectionsContainer getConnections() {
         return connections;
     }
 
     /**
      * Called by the simulator framework to set list of available connections.
      */
-    public void setConnections(final ConnectionsContainer connectionContainer) {
+    public final void setConnections(final ConnectionsContainer connectionContainer) {
         this.connections = connectionContainer;
     }
 
     /**
      * Gets the specific connection based on the context.
      */
-    protected Connection getConnection(final ConnectionContext context) {
+    protected final Connection getConnection(final ConnectionContext context) {
         String connectionName = context.getConnectionName();
         return connections.get(connectionName);
     }
@@ -80,21 +80,21 @@ public abstract class AbstractHandler {
     /**
      * Gets a container where message handlers can store and retrieve any kind of data.
      */
-    public SimulatorStateContainer getState() {
+    public final SimulatorStateContainer getState() {
         return state;
     }
 
     /**
      * Called by the simulator framework to set the state.
      */
-    protected void setState(final SimulatorStateContainer simulatorState) {
+    protected final void setState(final SimulatorStateContainer simulatorState) {
         this.state = simulatorState;
     }
 
     /**
      * Sends a text message over the connection matching the context.
      */
-    protected void sendTo(final ConnectionContext context, final String text) {
+    protected final void sendTo(final ConnectionContext context, final String text) {
         Connection connection = getConnection(context);
         connection.send(context, text);
     }
@@ -102,7 +102,7 @@ public abstract class AbstractHandler {
     /**
      * Sends a binary message over the connection matching the context.
      */
-    protected void sendTo(final ConnectionContext context, final byte[] buffer) {
+    protected final void sendTo(final ConnectionContext context, final byte[] buffer) {
         Connection connection = getConnection(context);
         connection.send(context, buffer);
     }
@@ -110,7 +110,7 @@ public abstract class AbstractHandler {
     /**
      * Sends a Java object message over the connection matching the context.
      */
-    protected void sendTo(final ConnectionContext context, final Object object) {
+    protected final void sendTo(final ConnectionContext context, final Object object) {
         Connection connection = getConnection(context);
         connection.send(context, object);
     }
@@ -119,7 +119,7 @@ public abstract class AbstractHandler {
      * Sends a text message over the connection matching the connection name.<br/>
      * This most likely only works with outgoing connections.
      */
-    protected void sendTo(final String connectionName, final String text) {
+    protected final void sendTo(final String connectionName, final String text) {
         Connection connection = getConnections().get(connectionName);
         checkArgument(connection != null, "Unknown connection with name '" + connectionName + "'.");
 
@@ -130,7 +130,7 @@ public abstract class AbstractHandler {
      * Sends a binary message over the connection matching the connection name.<br/>
      * This most likely only works with outgoing connections.
      */
-    protected void sendTo(final String connectionName, final byte[] buffer) {
+    protected final void sendTo(final String connectionName, final byte[] buffer) {
         Connection connection = getConnections().get(connectionName);
         checkArgument(connection != null, "Unknown connection with name '" + connectionName + "'.");
 
@@ -141,7 +141,7 @@ public abstract class AbstractHandler {
      * Sends a Java object message over the connection matching the connection name.<br/>
      * This most likely only works with outgoing connections.
      */
-    protected void sendTo(final String connectionName, final Object object) {
+    protected final void sendTo(final String connectionName, final Object object) {
         Connection connection = getConnections().get(connectionName);
         checkArgument(connection != null, "Unknown connection with name '" + connectionName + "'.");
 
