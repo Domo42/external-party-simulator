@@ -1,6 +1,5 @@
 import com.codebullets.external.party.simulator.pipeline.AbstractConnectionEstablishedHandler
 import com.codebullets.external.party.simulator.pipeline.ConnectionEstablishedEvent
-import com.codebullets.external.party.simulator.pipeline.ConnectionEstablishedEvent
 
 /**
  * This class is an example handler that is triggered in case either an

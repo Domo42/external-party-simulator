@@ -13,28 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.codebullets.external.party.simulator.pipeline;
+package com.codebullets.external.party.simulator.worker;
 
 import com.codebullets.external.party.simulator.connections.ConnectionContext;
-import com.codebullets.external.party.simulator.worker.ConnectionEvent;
 
 /**
- * Event triggered in case a new connection has been established.
+ * An event associated with a specific connection.
  */
-public class ConnectionEstablishedEvent implements ConnectionEvent {
-    private final ConnectionContext connectionContext;
-
+public interface ConnectionEvent extends EventItem {
     /**
-     * Generates a new instance of ConnectionEstablishedEvent.
+     * Gets the connection context.
      */
-    public ConnectionEstablishedEvent(final ConnectionContext connectionContext) {
-        this.connectionContext = connectionContext;
-    }
-
-    /**
-     * Gets the established connection context.
-     */
-    public ConnectionContext getConnectionContext() {
-        return connectionContext;
-    }
+    ConnectionContext getConnectionContext();
 }

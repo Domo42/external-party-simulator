@@ -1,7 +1,6 @@
 import com.codebullets.external.party.simulator.pipeline.AbstractMessageHandler
 import com.codebullets.external.party.simulator.pipeline.ContentType
 import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
-import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
 
 /**
  * Sends a message back to the caller indicating the initial delay. The

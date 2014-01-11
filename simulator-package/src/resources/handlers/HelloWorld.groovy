@@ -1,4 +1,3 @@
-import com.codebullets.external.party.simulator.connections.Connection
 import com.codebullets.external.party.simulator.pipeline.AbstractMessageHandler
 import com.codebullets.external.party.simulator.pipeline.ContentType
 import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent

@@ -1,7 +1,6 @@
 import com.codebullets.external.party.simulator.pipeline.AbstractMessageHandler
 import com.codebullets.external.party.simulator.pipeline.ContentType
 import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
-import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
 
 import java.util.concurrent.TimeUnit
 

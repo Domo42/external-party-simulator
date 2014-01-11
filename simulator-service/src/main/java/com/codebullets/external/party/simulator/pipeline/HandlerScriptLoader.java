@@ -59,7 +59,11 @@ public class HandlerScriptLoader {
                 AbstractMessageHandler.class, allHandlers(classLoader).get(HandlerType.MESSAGE));
 
         for (AbstractMessageHandler handler : allHandlers) {
-            if (isMatchingHandler(handler, messageItem.getContentType(), messageItem.getMessageType())) {
+            if (isMatchingHandler(
+                    handler,
+                    messageItem.getContentType(),
+                    messageItem.getMessageType(),
+                    messageItem.getConnectionContext().getConnectionName())) {
                 handlers.add(handler);
             }
         }
@@ -71,7 +75,7 @@ public class HandlerScriptLoader {
      * Loads all scripts and returns a list of matching handlers to be executed.
      */
     public Iterable<AbstractConnectionEstablishedHandler> loadMatchingScriptHandlers(
-            final ConnectionEstablishedEvent messageItem,
+            final ConnectionEstablishedEvent establishedEvent,
             final GroovyClassLoader classLoader) {
 
         List<AbstractConnectionEstablishedHandler> handlers = new ArrayList<>();
@@ -80,20 +84,37 @@ public class HandlerScriptLoader {
                 AbstractConnectionEstablishedHandler.class, allHandlers(classLoader).get(HandlerType.CONNECTION_ESTABLISHED));
 
         for (AbstractConnectionEstablishedHandler handler : allHandlers) {
-            handlers.add(handler);
+            if (isMatchingHandler(handler, establishedEvent.getConnectionContext().getConnectionName())) {
+                handlers.add(handler);
+            }
         }
 
         return handlers;
     }
 
-    private boolean isMatchingHandler(final AbstractMessageHandler handler, final ContentType messageContentType, final String messageType) {
+    private boolean isMatchingHandler(final AbstractMessageHandler handler, final ContentType messageContentType, final String messageType,
+                                      final String connectionName) {
         boolean isMatch = false;
 
         if (messageContentType.equals(handler.getContentType())) {
-            GlobMatcher matcher = new GlobMatcher(handler.getMessageType());
-            if (matcher.isMatch(messageType)) {
-                isMatch = true;
+            GlobMatcher msgTypeMatcher = new GlobMatcher(handler.getMessageType());
+            if (msgTypeMatcher.isMatch(messageType)) {
+                GlobMatcher connectionNameMatcher = new GlobMatcher(handler.getConnectionFilter());
+                if (connectionNameMatcher.isMatch(connectionName)) {
+                    isMatch = true;
+                }
             }
+        }
+
+        return isMatch;
+    }
+
+    private boolean isMatchingHandler(final AbstractConnectionEstablishedHandler handler, final String connectionName) {
+        boolean isMatch = false;
+
+        GlobMatcher connectionNameMatcher = new GlobMatcher(handler.getConnectionFilter());
+        if (connectionNameMatcher.isMatch(connectionName)) {
+            isMatch = true;
         }
 
         return isMatch;

@@ -16,7 +16,7 @@
 package com.codebullets.external.party.simulator.pipeline;
 
 import com.codebullets.external.party.simulator.connections.ConnectionContext;
-import com.codebullets.external.party.simulator.worker.EventItem;
+import com.codebullets.external.party.simulator.worker.ConnectionEvent;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +25,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Information about a specific message that has been received.
  */
-public final class MessageReceivedEvent implements EventItem {
+public final class MessageReceivedEvent implements ConnectionEvent {
     private final ContentType contentType;
     private final String messageType;
     private final Object content;
@@ -88,42 +88,42 @@ public final class MessageReceivedEvent implements EventItem {
     }
 
     /**
-     * Creates a message work item of type String.
+     * Creates a message received event of type text.
      */
     public static MessageReceivedEvent create(final ConnectionContext connectionContext, final String text, @Nullable final String msgType) {
         return new MessageReceivedEvent(connectionContext, text, ContentType.TEXT, msgType);
     }
 
     /**
-     * Creates a message work item of type String.
+     * Creates a message received event of type text.
      */
     public static MessageReceivedEvent create(final ConnectionContext connectionContext, final String text) {
         return MessageReceivedEvent.create(connectionContext, text, null);
     }
 
     /**
-     * Creates a message work item of type binary.
+     * Creates a message received event of type binary.
      */
     public static MessageReceivedEvent create(final ConnectionContext connectionContext, final byte[] buffer, @Nullable final String msgType) {
         return new MessageReceivedEvent(connectionContext, buffer, ContentType.BINARY, msgType);
     }
 
     /**
-     * Creates a message work item of type binary.
+     * Creates a message received event of type binary.
      */
     public static MessageReceivedEvent create(final ConnectionContext connectionContext, final byte[] buffer) {
         return MessageReceivedEvent.create(connectionContext, buffer, null);
     }
 
     /**
-     * Creates a message work item of type object.
+     * Creates a message received event of type object.
      */
     public static MessageReceivedEvent create(final ConnectionContext connectionContext, final Object obj, @Nullable final String msgType) {
         return new MessageReceivedEvent(connectionContext, obj, ContentType.OBJECT, msgType);
     }
 
     /**
-     * Creates a message work item of type object.
+     * Creates a message received event of type object.
      */
     public static MessageReceivedEvent create(final ConnectionContext connectionContext, final Object obj) {
         return MessageReceivedEvent.create(connectionContext, obj, null);

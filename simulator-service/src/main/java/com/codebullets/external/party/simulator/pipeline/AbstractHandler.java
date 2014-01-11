@@ -32,6 +32,15 @@ public abstract class AbstractHandler {
     private ConnectionsContainer connections;
 
     /**
+     * Override this method to apply a filter string that limits the  the handler to be executed.<p/>
+     * The filter is applied on the source events connections name. Glob wildcards like '*' or '?'
+     * are possible. The default is '*' which means the handler is executed for all connections.
+     */
+    protected String getConnectionFilter() {
+        return "*";
+    }
+
+    /**
      * Called by the simulator framework to set the queue.
      */
     protected void setWorkerQueue(final WorkerQueue queue) {
