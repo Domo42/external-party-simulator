@@ -54,7 +54,7 @@ public class GroovyScriptPipeline implements ScriptPipeline {
      * {@inheritDoc}
      */
     @Override
-    public void handle(final MessageWorkItem message) {
+    public void handle(final MessageReceivedEvent message) {
         GroovyClassLoader classLoader = new GroovyClassLoader(this.getClass().getClassLoader());
         Iterable<AbstractMessageHandler> handlers = scriptLoader.loadMatchingScriptHandlers(message, classLoader);
 
@@ -67,7 +67,7 @@ public class GroovyScriptPipeline implements ScriptPipeline {
      * {@inheritDoc}
      */
     @Override
-    public void handle(final ConnectionEstablishedWorkItem establishedMessage) {
+    public void handle(final ConnectionEstablishedEvent establishedMessage) {
         GroovyClassLoader classLoader = new GroovyClassLoader(this.getClass().getClassLoader());
         Iterable<AbstractConnectionEstablishedHandler> handlers = scriptLoader.loadMatchingScriptHandlers(establishedMessage, classLoader);
 
@@ -76,7 +76,7 @@ public class GroovyScriptPipeline implements ScriptPipeline {
         }
     }
 
-    private void tryHandleMessage(final AbstractMessageHandler handler, final MessageWorkItem message) {
+    private void tryHandleMessage(final AbstractMessageHandler handler, final MessageReceivedEvent message) {
         try {
             handler.setWorkerQueue(queue);
             handler.setConnections(connectionsContainer);
@@ -87,7 +87,7 @@ public class GroovyScriptPipeline implements ScriptPipeline {
         }
     }
 
-    private void tryHandleMessage(final AbstractConnectionEstablishedHandler handler, final ConnectionEstablishedWorkItem message) {
+    private void tryHandleMessage(final AbstractConnectionEstablishedHandler handler, final ConnectionEstablishedEvent message) {
         try {
             handler.setWorkerQueue(queue);
             handler.setConnections(connectionsContainer);

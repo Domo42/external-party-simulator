@@ -52,7 +52,7 @@ public class HandlerScriptLoader {
     /**
      * Loads all scripts and returns a list of matching handlers to be executed.
      */
-    public Iterable<AbstractMessageHandler> loadMatchingScriptHandlers(final MessageWorkItem messageItem, final GroovyClassLoader classLoader) {
+    public Iterable<AbstractMessageHandler> loadMatchingScriptHandlers(final MessageReceivedEvent messageItem, final GroovyClassLoader classLoader) {
         List<AbstractMessageHandler> handlers = new ArrayList<>();
 
         Iterable<AbstractMessageHandler> allHandlers = createCollectionOfType(
@@ -71,7 +71,7 @@ public class HandlerScriptLoader {
      * Loads all scripts and returns a list of matching handlers to be executed.
      */
     public Iterable<AbstractConnectionEstablishedHandler> loadMatchingScriptHandlers(
-            final ConnectionEstablishedWorkItem messageItem,
+            final ConnectionEstablishedEvent messageItem,
             final GroovyClassLoader classLoader) {
 
         List<AbstractConnectionEstablishedHandler> handlers = new ArrayList<>();

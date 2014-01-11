@@ -15,7 +15,7 @@
  */
 package com.codebullets.external.party.simulator.startup;
 
-import com.codebullets.external.party.simulator.worker.WorkItem;
+import com.codebullets.external.party.simulator.worker.EventItem;
 import com.codebullets.external.party.simulator.worker.WorkerQueue;
 import com.codebullets.sagalib.MessageStream;
 import org.slf4j.Logger;
@@ -41,7 +41,7 @@ public class Service implements Runnable {
         this.sagaLib = sagaLib;
 
         // indicate startup to self
-        this.workerQueue.add(new StartUpWorkItem());
+        this.workerQueue.add(new StartUpEventItem());
     }
 
     /**
@@ -54,7 +54,7 @@ public class Service implements Runnable {
         boolean keepRunning = true;
 
         while (keepRunning) {
-            WorkItem item = null;
+            EventItem item = null;
 
             try {
                 item = workerQueue.take();

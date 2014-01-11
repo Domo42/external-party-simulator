@@ -23,14 +23,14 @@ import javax.inject.Inject;
 /**
  * Message has been received. Handle it by calling the matching scripts.
  */
-public class MessageWorkItemSaga extends AbstractSingleEventSaga {
+public class MessageReceivedEventSaga extends AbstractSingleEventSaga {
     private final ScriptPipeline scriptPipeline;
 
     /**
-     * Generates a new instance of MessageWorkItemSaga.
+     * Generates a new instance of MessageReceivedEventSaga.
      */
     @Inject
-    public MessageWorkItemSaga(final ScriptPipeline scriptPipeline) {
+    public MessageReceivedEventSaga(final ScriptPipeline scriptPipeline) {
         this.scriptPipeline = scriptPipeline;
     }
 
@@ -38,7 +38,7 @@ public class MessageWorkItemSaga extends AbstractSingleEventSaga {
      * Called as a message has been received or partly processed.
      */
     @StartsSaga
-    public void messageReceived(final MessageWorkItem message) {
+    public void messageReceived(final MessageReceivedEvent message) {
         scriptPipeline.handle(message);
     }
 }

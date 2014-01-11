@@ -24,7 +24,7 @@ public interface WorkerQueue {
     /**
      * Add an item into the worker queue.
      */
-    void add(WorkItem item);
+    void add(EventItem item);
 
     /**
      * Adds an item into the worker queue. The item is not handled immediately.
@@ -32,11 +32,11 @@ public interface WorkerQueue {
      * this method will not delay other items added to the queue with no or shorter
      * delayed handling time.
      */
-    void addDelayed(WorkItem item, long delay, TimeUnit unit);
+    void addDelayed(EventItem item, long delay, TimeUnit unit);
 
     /**
      * Takes an item from the worker queue. Blocks if no item present.
      * @throws InterruptedException in case waiting is interrupted.
      */
-    WorkItem take() throws InterruptedException;
+    EventItem take() throws InterruptedException;
 }

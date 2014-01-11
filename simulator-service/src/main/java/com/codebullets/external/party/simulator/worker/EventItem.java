@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.codebullets.external.party.simulator.startup;
-
-import com.codebullets.external.party.simulator.worker.WorkItem;
+package com.codebullets.external.party.simulator.worker;
 
 /**
- * Indicates the service startup.
+ * An item of the service worker queue.
  */
-public class StartUpWorkItem implements WorkItem {
+public interface EventItem {
 }

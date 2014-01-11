@@ -1,6 +1,7 @@
 import com.codebullets.external.party.simulator.pipeline.AbstractMessageHandler
 import com.codebullets.external.party.simulator.pipeline.ContentType
-import com.codebullets.external.party.simulator.pipeline.MessageWorkItem
+import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
+import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
 
 import java.util.concurrent.TimeUnit
 
@@ -23,13 +24,13 @@ class DelayResponseHandler extends AbstractMessageHandler {
     }
 
     @Override
-    void handle(final MessageWorkItem messageItem) {
-        def text = messageItem.textContent
+    void handle(final MessageReceivedEvent receivedEvent) {
+        def text = receivedEvent.textContent
 
         // if incoming text contains only digits
         if (text ==~ /\d+/) {
             def delayInSeconds = Integer.parseInt(text);
-            def newWorkItem = MessageWorkItem.create(messageItem.connectionContext, delayInSeconds, "delayedMessage")
+            def newWorkItem = MessageReceivedEvent.create(receivedEvent.connectionContext, delayInSeconds, "delayedMessage")
             workerQueue.addDelayed(newWorkItem, delayInSeconds, TimeUnit.SECONDS)
         }
     }

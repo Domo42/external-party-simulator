@@ -1,5 +1,6 @@
 import com.codebullets.external.party.simulator.pipeline.AbstractConnectionEstablishedHandler
-import com.codebullets.external.party.simulator.pipeline.ConnectionEstablishedWorkItem
+import com.codebullets.external.party.simulator.pipeline.ConnectionEstablishedEvent
+import com.codebullets.external.party.simulator.pipeline.ConnectionEstablishedEvent
 
 /**
  * This class is an example handler that is triggered in case either an
@@ -13,8 +14,8 @@ class GreetingsStranger extends AbstractConnectionEstablishedHandler {
      * new connection has been established.
      */
     @Override
-    void handle(final ConnectionEstablishedWorkItem establishedItem) {
+    void handle(final ConnectionEstablishedEvent connectedEvent) {
         // as soon as a connection is established send a greeting back to caller
-        sendTo(establishedItem.connectionContext, "Greetings Stranger!")
+        sendTo(connectedEvent.connectionContext, "Greetings Stranger!")
     }
 }

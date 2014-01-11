@@ -17,7 +17,7 @@ package com.codebullets.external.party.simulator.handlers;
 
 import com.codebullets.external.party.simulator.connections.ConnectionLoader;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
-import com.codebullets.external.party.simulator.startup.StartUpWorkItem;
+import com.codebullets.external.party.simulator.startup.StartUpEventItem;
 import com.codebullets.sagalib.AbstractSingleEventSaga;
 import com.codebullets.sagalib.StartsSaga;
 import org.slf4j.Logger;
@@ -46,7 +46,7 @@ public class ServiceStartupSaga extends AbstractSingleEventSaga {
      * Called when the service starts up.
      */
     @StartsSaga
-    public void start(final StartUpWorkItem message) {
+    public void start(final StartUpEventItem message) {
         LOG.info("starting connections");
 
         loader.startAllConnections();

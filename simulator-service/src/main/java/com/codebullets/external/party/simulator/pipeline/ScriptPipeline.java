@@ -22,10 +22,10 @@ public interface ScriptPipeline {
     /**
      * Handles a message by calling a list of matching handler scripts.
      */
-    void handle(MessageWorkItem message);
+    void handle(MessageReceivedEvent message);
 
     /**
      * Handles the established connection indication by calling a list of matching handler scripts.
      */
-    void handle(ConnectionEstablishedWorkItem establishedMessage);
+    void handle(ConnectionEstablishedEvent establishedMessage);
 }

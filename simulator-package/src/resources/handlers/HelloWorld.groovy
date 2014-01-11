@@ -1,7 +1,7 @@
 import com.codebullets.external.party.simulator.connections.Connection
 import com.codebullets.external.party.simulator.pipeline.AbstractMessageHandler
 import com.codebullets.external.party.simulator.pipeline.ContentType
-import com.codebullets.external.party.simulator.pipeline.MessageWorkItem
+import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
 
 /**
  * This handler returns an all upper case version of hello world
@@ -32,11 +32,11 @@ class HelloWorldHandler extends AbstractMessageHandler {
      * received matching all criteria from above (text + no type).
      */
     @Override
-    void handle(final MessageWorkItem messageItem) {
+    void handle(final MessageReceivedEvent receivedEvent) {
         // in case message is the test hello world text, send back the
         // message in upper case letters
-        if (messageItem.textContent == "Hello, World!") {
-            sendTo(messageItem.connectionContext, messageItem.textContent.toUpperCase())
+        if (receivedEvent.textContent == "Hello, World!") {
+            sendTo(receivedEvent.connectionContext, receivedEvent.textContent.toUpperCase())
         }
     }
 }

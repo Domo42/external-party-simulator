@@ -17,7 +17,7 @@ package com.codebullets.external.party.simulator.connections.websocket.inbound;
 
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import com.codebullets.external.party.simulator.connections.websocket.NettyConnectionContext;
-import com.codebullets.external.party.simulator.pipeline.MessageWorkItem;
+import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
@@ -137,11 +137,11 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Obj
         } else if (frame instanceof TextWebSocketFrame) {
             String request = ((TextWebSocketFrame) frame).text();
             LOG.debug("{} received {}", ctx.channel(), request);
-            connectionMonitor.messageReceived(MessageWorkItem.create(getContext(ctx), request));
+            connectionMonitor.messageReceived(MessageReceivedEvent.create(getContext(ctx), request));
         } else if (frame instanceof BinaryWebSocketFrame) {
             byte[] data = frame.content().array();
             LOG.debug("{} received {} bytes of data.", ctx.channel(), data.length);
-            connectionMonitor.messageReceived(MessageWorkItem.create(getContext(ctx), data));
+            connectionMonitor.messageReceived(MessageReceivedEvent.create(getContext(ctx), data));
         } else {
             throw new UnsupportedOperationException(String.format("%s frame types not supported", frame.getClass().getName()));
         }

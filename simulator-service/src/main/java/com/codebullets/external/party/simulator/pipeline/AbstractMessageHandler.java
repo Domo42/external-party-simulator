@@ -37,5 +37,5 @@ public abstract class AbstractMessageHandler extends AbstractHandler {
     /**
      * This method is called for the handler to perform its logic.
      */
-    public abstract void handle(final MessageWorkItem messageItem);
+    public abstract void handle(final MessageReceivedEvent receivedEvent);
 }

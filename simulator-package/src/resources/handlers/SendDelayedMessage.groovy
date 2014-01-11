@@ -1,6 +1,7 @@
 import com.codebullets.external.party.simulator.pipeline.AbstractMessageHandler
 import com.codebullets.external.party.simulator.pipeline.ContentType
-import com.codebullets.external.party.simulator.pipeline.MessageWorkItem
+import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
+import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent
 
 /**
  * Sends a message back to the caller indicating the initial delay. The
@@ -23,7 +24,7 @@ class SendDelayedMessage extends AbstractMessageHandler {
      * The original execution delay has been caused by the DelayResponseHandler.
      */
     @Override
-    void handle(final MessageWorkItem messageItem) {
-        sendTo(messageItem.connectionContext, "This message has been delayed by " + messageItem.objectContent + " seconds.")
+    void handle(final MessageReceivedEvent receivedEvent) {
+        sendTo(receivedEvent.connectionContext, "This message has been delayed by " + receivedEvent.objectContent + " seconds.")
     }
 }

@@ -24,27 +24,27 @@ import java.util.concurrent.TimeUnit;
  * Holds the work items for the simulator service.
  */
 public class ServiceWorkerQueue implements WorkerQueue {
-    private final BlockingQueue<WorkItem> workItems = new LinkedBlockingQueue<>();
+    private final BlockingQueue<EventItem> eventItems = new LinkedBlockingQueue<>();
     private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(1);
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void add(final WorkItem item) {
-        workItems.add(item);
+    public void add(final EventItem item) {
+        eventItems.add(item);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void addDelayed(final WorkItem item, final long delay, final TimeUnit unit) {
+    public void addDelayed(final EventItem item, final long delay, final TimeUnit unit) {
         executor.schedule(
                 new Runnable() {
                     @Override
                     public void run() {
-                        workItems.add(item);
+                        eventItems.add(item);
                     }
                 },
                 delay,
@@ -55,7 +55,7 @@ public class ServiceWorkerQueue implements WorkerQueue {
      * {@inheritDoc}
      */
     @Override
-    public WorkItem take() throws InterruptedException {
-        return workItems.take();
+    public EventItem take() throws InterruptedException {
+        return eventItems.take();
     }
 }

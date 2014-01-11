@@ -40,7 +40,7 @@ public abstract class AbstractHandler {
 
     /**
      * Gets the simulator worker queue. This queue can be used to enqueue additional
-     * {@link MessageWorkItem} for further processing.
+     * {@link MessageReceivedEvent} for further processing.
      */
     public WorkerQueue getWorkerQueue() {
         return workerQueue;

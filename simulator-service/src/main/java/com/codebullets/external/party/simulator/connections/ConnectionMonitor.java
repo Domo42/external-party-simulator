@@ -15,7 +15,7 @@
  */
 package com.codebullets.external.party.simulator.connections;
 
-import com.codebullets.external.party.simulator.pipeline.MessageWorkItem;
+import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent;
 
 /**
  * Callback interface that is injected into a connection. The connection
@@ -31,5 +31,5 @@ public interface ConnectionMonitor {
     /**
      * Called when a message has been received.
      */
-    void messageReceived(MessageWorkItem message);
+    void messageReceived(MessageReceivedEvent message);
 }

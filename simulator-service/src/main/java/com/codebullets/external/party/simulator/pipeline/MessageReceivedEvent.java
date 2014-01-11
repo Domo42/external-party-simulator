@@ -16,7 +16,7 @@
 package com.codebullets.external.party.simulator.pipeline;
 
 import com.codebullets.external.party.simulator.connections.ConnectionContext;
-import com.codebullets.external.party.simulator.worker.WorkItem;
+import com.codebullets.external.party.simulator.worker.EventItem;
 
 import javax.annotation.Nullable;
 
@@ -25,7 +25,7 @@ import static com.google.common.base.Preconditions.checkState;
 /**
  * Information about a specific message that has been received.
  */
-public final class MessageWorkItem implements WorkItem {
+public final class MessageReceivedEvent implements EventItem {
     private final ContentType contentType;
     private final String messageType;
     private final Object content;
@@ -34,8 +34,9 @@ public final class MessageWorkItem implements WorkItem {
     /**
      * Use static builder method to create instance.
      */
-    private MessageWorkItem(final ConnectionContext connectionContext, final Object content, final ContentType contentType,
-                            @Nullable final String messageType) {
+    private MessageReceivedEvent(
+            final ConnectionContext connectionContext, final Object content, final ContentType contentType,
+            @Nullable final String messageType) {
         this.contentType = contentType;
         this.messageType = messageType;
         this.connectionContext = connectionContext;
@@ -89,42 +90,42 @@ public final class MessageWorkItem implements WorkItem {
     /**
      * Creates a message work item of type String.
      */
-    public static MessageWorkItem create(final ConnectionContext connectionContext, final String text, @Nullable final String msgType) {
-        return new MessageWorkItem(connectionContext, text, ContentType.TEXT, msgType);
+    public static MessageReceivedEvent create(final ConnectionContext connectionContext, final String text, @Nullable final String msgType) {
+        return new MessageReceivedEvent(connectionContext, text, ContentType.TEXT, msgType);
     }
 
     /**
      * Creates a message work item of type String.
      */
-    public static MessageWorkItem create(final ConnectionContext connectionContext, final String text) {
-        return MessageWorkItem.create(connectionContext, text, null);
+    public static MessageReceivedEvent create(final ConnectionContext connectionContext, final String text) {
+        return MessageReceivedEvent.create(connectionContext, text, null);
     }
 
     /**
      * Creates a message work item of type binary.
      */
-    public static MessageWorkItem create(final ConnectionContext connectionContext, final byte[] buffer, @Nullable final String msgType) {
-        return new MessageWorkItem(connectionContext, buffer, ContentType.BINARY, msgType);
+    public static MessageReceivedEvent create(final ConnectionContext connectionContext, final byte[] buffer, @Nullable final String msgType) {
+        return new MessageReceivedEvent(connectionContext, buffer, ContentType.BINARY, msgType);
     }
 
     /**
      * Creates a message work item of type binary.
      */
-    public static MessageWorkItem create(final ConnectionContext connectionContext, final byte[] buffer) {
-        return MessageWorkItem.create(connectionContext, buffer, null);
+    public static MessageReceivedEvent create(final ConnectionContext connectionContext, final byte[] buffer) {
+        return MessageReceivedEvent.create(connectionContext, buffer, null);
     }
 
     /**
      * Creates a message work item of type object.
      */
-    public static MessageWorkItem create(final ConnectionContext connectionContext, final Object obj, @Nullable final String msgType) {
-        return new MessageWorkItem(connectionContext, obj, ContentType.OBJECT, msgType);
+    public static MessageReceivedEvent create(final ConnectionContext connectionContext, final Object obj, @Nullable final String msgType) {
+        return new MessageReceivedEvent(connectionContext, obj, ContentType.OBJECT, msgType);
     }
 
     /**
      * Creates a message work item of type object.
      */
-    public static MessageWorkItem create(final ConnectionContext connectionContext, final Object obj) {
-        return MessageWorkItem.create(connectionContext, obj, null);
+    public static MessageReceivedEvent create(final ConnectionContext connectionContext, final Object obj) {
+        return MessageReceivedEvent.create(connectionContext, obj, null);
     }
 }

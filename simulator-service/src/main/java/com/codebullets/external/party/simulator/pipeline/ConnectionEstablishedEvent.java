@@ -15,30 +15,26 @@
  */
 package com.codebullets.external.party.simulator.pipeline;
 
-import com.codebullets.sagalib.AbstractSingleEventSaga;
-import com.codebullets.sagalib.StartsSaga;
-
-import javax.inject.Inject;
+import com.codebullets.external.party.simulator.connections.ConnectionContext;
+import com.codebullets.external.party.simulator.worker.EventItem;
 
 /**
- * Handles the case a new connection has been established.
+ * Event triggered in case a new connection has been established.
  */
-public class ConnectionEstablishedWorkItemSaga extends AbstractSingleEventSaga {
-    private final ScriptPipeline scriptPipeline;
+public class ConnectionEstablishedEvent implements EventItem {
+    private final ConnectionContext connectionContext;
 
     /**
-     * Generates a new instance of ConnectionEstablishedWorkItemSaga.
+     * Generates a new instance of ConnectionEstablishedEvent.
      */
-    @Inject
-    public ConnectionEstablishedWorkItemSaga(final ScriptPipeline scriptPipeline) {
-        this.scriptPipeline = scriptPipeline;
+    public ConnectionEstablishedEvent(final ConnectionContext connectionContext) {
+        this.connectionContext = connectionContext;
     }
 
     /**
-     * New connection has been established.
+     * Gets the established connection context.
      */
-    @StartsSaga
-    public void connectionEstablished(final ConnectionEstablishedWorkItem workItem) {
-        scriptPipeline.handle(workItem);
+    public ConnectionContext getConnectionContext() {
+        return connectionContext;
     }
 }

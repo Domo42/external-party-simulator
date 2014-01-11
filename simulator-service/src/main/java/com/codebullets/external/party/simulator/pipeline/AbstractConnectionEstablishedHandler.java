@@ -22,5 +22,5 @@ public abstract class AbstractConnectionEstablishedHandler extends AbstractHandl
     /**
      * This method is called for the handler to perform its logic.
      */
-    public abstract void handle(final ConnectionEstablishedWorkItem establishedItem);
+    public abstract void handle(final ConnectionEstablishedEvent connectedEvent);
 }
