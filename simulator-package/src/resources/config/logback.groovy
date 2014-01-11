@@ -11,4 +11,4 @@ appender("STDOUT", ConsoleAppender) {
 }
 
 logger("com.codebullets", DEBUG)
-root(DEBUG, ["STDOUT"])
+root(INFO, ["STDOUT"])
