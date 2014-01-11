@@ -22,6 +22,17 @@ class DelayResponseHandler extends AbstractMessageHandler {
         return null
     }
 
+    /**
+     * Overriding this method is optional. It ensures this handler is
+     * only executed in case the the connection being established is
+     * named 'control'. By default the handler would be executed on all
+     * connections.
+     */
+    @Override
+    protected String getConnectionFilter() {
+        return "control"
+    }
+
     @Override
     void handle(final MessageReceivedEvent receivedEvent) {
         def text = receivedEvent.textContent

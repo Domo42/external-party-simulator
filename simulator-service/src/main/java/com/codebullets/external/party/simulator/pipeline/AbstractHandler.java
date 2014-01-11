@@ -27,6 +27,8 @@ import static com.google.common.base.Preconditions.checkArgument;
  * Base class for any kind of pipeline event handler.
  */
 public abstract class AbstractHandler {
+    private static final String ECHO_CONNECTION_NAME = "echo";
+
     private WorkerQueue workerQueue;
     private SimulatorStateContainer state;
     private ConnectionsContainer connections;
@@ -146,5 +148,31 @@ public abstract class AbstractHandler {
         checkArgument(connection != null, "Unknown connection with name '" + connectionName + "'.");
 
         connection.send(object);
+    }
+
+    /**
+     * Sends a text to all clients connected to the connection named echo.
+     */
+    protected final void echo(final String text) {
+        Connection echo = getEcho();
+        if (echo != null) {
+            echo.send(text);
+        }
+    }
+
+    /**
+     * Sends a text to all clients connected to the connection named echo. The text
+     * is formatted with the arguments provided by {@code args}. The text is formatted
+     * with {@code String.format} behavior.<p/>
+     * <strong>Example:</strong><p/>
+     * {@code echo("Received the message %s times.", numReceived);}
+     */
+    protected final void echo(final String text, final Object... args) {
+        String formattedText = String.format(text, args);
+        echo(formattedText);
+    }
+
+    private Connection getEcho() {
+        return getConnections().get(ECHO_CONNECTION_NAME);
     }
 }

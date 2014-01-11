@@ -24,6 +24,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
@@ -61,6 +62,7 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Obj
     private final URI endpoint;
     private final ConnectionMonitor connectionMonitor;
     private final String connectionName;
+    private final ChannelGroup connectedChannels;
     private NettyConnectionContext context;
 
     private WebSocketServerHandshaker handshaker;
@@ -68,14 +70,20 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Obj
     /**
      * Generates a new instance of NettyWebSocketServerHandler.
      */
-    public NettyWebSocketServerHandler(final URI endpoint, final ConnectionMonitor connectionMonitor, final String connectionName) {
+    public NettyWebSocketServerHandler(
+            final URI endpoint,
+            final ConnectionMonitor connectionMonitor,
+            final String connectionName,
+            final ChannelGroup connectedChannels) {
         this.endpoint = endpoint;
         this.connectionMonitor = connectionMonitor;
         this.connectionName = connectionName;
+        this.connectedChannels = connectedChannels;
     }
 
     @Override
     public void channelActive(final ChannelHandlerContext ctx) throws Exception {
+        connectedChannels.add(ctx.channel());
         connectionMonitor.connectionEstablished(getContext(ctx));
         super.channelActive(ctx);
     }

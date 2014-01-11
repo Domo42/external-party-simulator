@@ -19,6 +19,7 @@ import com.codebullets.external.party.simulator.connections.ConnectionConfig;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
+import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpServerCodec;
@@ -35,14 +36,17 @@ public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel
     private final URI endpoint;
     private final ConnectionMonitor connectionMonitor;
     private final ConnectionConfig connectionConfig;
+    private final ChannelGroup connectedChannels;
 
     /**
      * Generates a new instance of WebSocketServerInitializer.
      */
-    public WebSocketServerInitializer(final URI endpoint, final ConnectionMonitor connectionMonitor, final ConnectionConfig connectionConfig) {
+    public WebSocketServerInitializer(final URI endpoint, final ConnectionMonitor connectionMonitor, final ConnectionConfig connectionConfig,
+                                      final ChannelGroup connectedChannels) {
         this.endpoint = endpoint;
         this.connectionMonitor = connectionMonitor;
         this.connectionConfig = connectionConfig;
+        this.connectedChannels = connectedChannels;
     }
 
     @Override
@@ -53,6 +57,6 @@ public class WebSocketServerInitializer extends ChannelInitializer<SocketChannel
         pipeline.addLast("codec-http", new HttpServerCodec());
         pipeline.addLast("readTimeoutHandler", new ReadTimeoutHandler(timeoutVal, TimeUnit.MILLISECONDS));
         pipeline.addLast("aggregator", new HttpObjectAggregator(Integer.MAX_VALUE));
-        pipeline.addLast("handler", new NettyWebSocketServerHandler(endpoint, connectionMonitor, connectionConfig.getName()));
+        pipeline.addLast("handler", new NettyWebSocketServerHandler(endpoint, connectionMonitor, connectionConfig.getName(), connectedChannels));
     }
 }

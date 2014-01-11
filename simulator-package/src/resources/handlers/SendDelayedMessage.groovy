@@ -24,6 +24,12 @@ class SendDelayedMessage extends AbstractMessageHandler {
      */
     @Override
     void handle(final MessageReceivedEvent receivedEvent) {
-        sendTo(receivedEvent.connectionContext, "This message has been delayed by " + receivedEvent.objectContent + " seconds.")
+        def context = receivedEvent.connectionContext;
+
+        // this text will be received by clients connected to the echo connection
+        echo("Sending initial greetings to %s, id = %s", context.connectionName, context.id);
+
+        // this text will be received by whoever has connected
+        sendTo(context, "This message has been delayed by " + receivedEvent.objectContent + " seconds.")
     }
 }

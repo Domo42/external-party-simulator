@@ -12,7 +12,12 @@ connection("control", InboundWebSocketConnection) {
     timeout = 300_000
 }
 
-// loopback connection to simulator control port for testing
+connection("echo", InboundWebSocketConnection) {
+    endpoint = "ws://localhost:5354/echo"
+    timeout = 300_000
+}
+
+// loopback connection to own simulator control port for testing
 connection("loopback", OutboundWebSocketConnection) {
     endpoint = "ws://localhost:5353/control"
     timeout = 30_000

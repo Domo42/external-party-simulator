@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.codebullets.external.party.simulator.handlers;
+package com.codebullets.external.party.simulator.startup;
 
 import com.codebullets.external.party.simulator.connections.ConnectionLoader;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
-import com.codebullets.external.party.simulator.startup.StartUpEventItem;
 import com.codebullets.sagalib.AbstractSingleEventSaga;
 import com.codebullets.sagalib.StartsSaga;
 import org.slf4j.Logger;

@@ -24,10 +24,12 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.websocketx.BinaryWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.util.concurrent.GlobalEventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +42,7 @@ public class InboundWebSocketConnection implements Connection {
     private static final Logger LOG = LoggerFactory.getLogger(InboundWebSocketConnection.class);
 
     private ConnectionMonitor connectionMonitor;
+    private DefaultChannelGroup connectedChannels;
 
     /**
      * {@inheritDoc}
@@ -50,11 +53,12 @@ public class InboundWebSocketConnection implements Connection {
 
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
+        connectedChannels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(new WebSocketServerInitializer(endpoint, connectionMonitor, config));
+                .childHandler(new WebSocketServerInitializer(endpoint, connectionMonitor, config, connectedChannels));
 
         try {
             serverBootstrap.bind(endpoint.getPort()).sync().channel();
@@ -73,12 +77,13 @@ public class InboundWebSocketConnection implements Connection {
     }
 
     /**
-     * Operation not supported on inbound connection. Use {@link #send(com.codebullets.external.party.simulator.connections.ConnectionContext, String)}
-     * instead.
+     * Broadcasts a text message to all connected channels.
      */
     @Override
     public void send(final String text) {
-        throw new UnsupportedOperationException("Sending is only possible for an inbound connection when the inbound connection context is specified.");
+        if (connectedChannels != null && !connectedChannels.isEmpty()) {
+            connectedChannels.writeAndFlush(new TextWebSocketFrame(text));
+        }
     }
 
     /**
@@ -95,12 +100,14 @@ public class InboundWebSocketConnection implements Connection {
     }
 
     /**
-     * Operation not supported without connection context. Use {@link #send(com.codebullets.external.party.simulator.connections.ConnectionContext, byte[])}
-     * instead.
+     * Broadcasts a byte buffer message to all connected channels.
      */
     @Override
     public void send(final byte[] buffer) {
-        throw new UnsupportedOperationException("Sending is only possible for an inbound connection when the inbound connection context is specified.");
+        if (connectedChannels != null && !connectedChannels.isEmpty()) {
+            ByteBuf binaryData = Unpooled.copiedBuffer(buffer);
+            connectedChannels.writeAndFlush(new BinaryWebSocketFrame(binaryData));
+        }
     }
 
     /**
@@ -110,7 +117,7 @@ public class InboundWebSocketConnection implements Connection {
     public void send(final ConnectionContext context, final byte[] buffer) {
         if (context instanceof NettyConnectionContext) {
             NettyConnectionContext nettyContext = (NettyConnectionContext) context;
-            ByteBuf binaryData = Unpooled.wrappedBuffer(buffer);
+            ByteBuf binaryData = Unpooled.copiedBuffer(buffer);
             nettyContext.getChannel().writeAndFlush(new BinaryWebSocketFrame(binaryData));
         } else {
             LOG.warn("Expected context of type NettyConnectionContext, but was " + context.getClass().getSimpleName());
