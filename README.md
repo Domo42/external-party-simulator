@@ -1,8 +1,8 @@
 external-party-simulator
 ========================
 
-Allows simulation of external components that either connect to your API; or
-the simulation of an external one own services are connecting to.
+The simulator can be used to fake other components that connect to your
+API; or to simulate an external system your services are connecting to.
 
 Simulation is done by executing one ore more Groovy scripts whenever data is
 received or a new connection has been established.
@@ -54,6 +54,78 @@ class HelloWorldHandler extends AbstractMessageHandler {
         if (receivedEvent.textContent == "Hello, World!") {
             sendTo(receivedEvent.connectionContext, receivedEvent.textContent.toUpperCase())
         }
+    }
+}
+```
+
+## Chaining Handlers
+
+More complex workflows can be created by chaining handlers together. This is
+done by adding custom events into simulator worker queue. For example a handler
+can analyze the incoming text and check whether it is in JSON format. Once
+detected this handle can puts a new event item into the queue with a message
+of type "JSON". This will result in only the handler being called that have
+returned "JSON" as content of the _messageType_ property.
+
+The next snippets show a more simple workflow. Every incoming message is
+checked whether the content consists purely of digit characters. If yes
+a new purely internal event item is created and put into the worker queue.
+In addition a delay is specified. This results event item not being executed
+right away.
+
+```groovy
+class DelayResponseHandler extends AbstractMessageHandler {
+    @Override
+    ContentType getContentType() {
+        return ContentType.TEXT
+    }
+
+    @Override
+    String getMessageType() {
+        return null
+    }
+
+    @Override
+    void handle(final MessageReceivedEvent receivedEvent) {
+        def text = receivedEvent.textContent
+
+        // if incoming text contains only digits
+        if (text ==~ /\d+/) {
+            def delayInSeconds = Integer.parseInt(text);
+            def newWorkItem = MessageReceivedEvent.create(receivedEvent.connectionContext, delayInSeconds, "delayedMessage")
+            workerQueue.addDelayed(newWorkItem, delayInSeconds, TimeUnit.SECONDS)
+        }
+    }
+}
+```
+
+Note the the ```MessageReceivedEvent.create``` call specified the a string
+"delayedMessage" as parameter. This string is used again in the next snipped
+to create a handler that is only triggered for this specific (internal)
+message type. This filtering is cause by returning "delayedMessage" as message
+type.
+
+```groovy
+class SendDelayedMessage extends AbstractMessageHandler {
+    @Override
+    ContentType getContentType() {
+        return ContentType.OBJECT
+    }
+
+    @Override
+    String getMessageType() {
+        return "delayedMessage"
+    }
+
+    /**
+     * The original execution delay has been caused by the DelayResponseHandler.
+     */
+    @Override
+    void handle(final MessageReceivedEvent receivedEvent) {
+        def context = receivedEvent.connectionContext;
+
+        // this text will be received by whoever has connected
+        sendTo(context, "This message has been delayed by " + receivedEvent.objectContent + " seconds.")
     }
 }
 ```
