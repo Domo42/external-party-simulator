@@ -103,10 +103,10 @@ class DelayResponseHandler extends AbstractMessageHandler {
 }
 ```
 
-Note the the ```MessageReceivedEvent.create``` call specified the a string
-"delayedMessage" as parameter. This string is used again in the next snipped
+Note the the ```MessageReceivedEvent.create``` call specified the string
+"delayedMessage" as parameter. This string is used again in the next snippet
 to create a handler that is only triggered for this specific (internal)
-message type. This filtering is cause by returning "delayedMessage" as message
+message type. This filtering is caused by returning "delayedMessage" as message
 type.
 
 ```groovy
