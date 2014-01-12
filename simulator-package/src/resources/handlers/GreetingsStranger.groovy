@@ -15,7 +15,7 @@ class GreetingsStranger extends AbstractConnectionEstablishedHandler {
      */
     @Override
     protected String getConnectionFilter() {
-        return "control"
+        return "*"
     }
 
     /**
@@ -26,5 +26,9 @@ class GreetingsStranger extends AbstractConnectionEstablishedHandler {
     void handle(final ConnectionEstablishedEvent connectedEvent) {
         // as soon as a connection is established send a greeting back to caller
         sendTo(connectedEvent.connectionContext, "Greetings Stranger!")
+
+        // this text will not be received by caller. Instead the echo is
+        // broadcast to clients connected to the 'echo' port
+        echo("Greeting sent back back to %s id = %s", connectedEvent.connectionContext.connectionName, connectedEvent.connectionContext.id)
     }
 }

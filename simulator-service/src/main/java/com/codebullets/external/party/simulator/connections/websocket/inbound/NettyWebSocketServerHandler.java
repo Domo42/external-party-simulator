@@ -82,13 +82,6 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Obj
     }
 
     @Override
-    public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-        connectedChannels.add(ctx.channel());
-        connectionMonitor.connectionEstablished(getContext(ctx));
-        super.channelActive(ctx);
-    }
-
-    @Override
     public void messageReceived(final ChannelHandlerContext ctx, final Object msg) throws Exception {
         if (msg instanceof FullHttpRequest) {
             handleHttpRequest(ctx, (FullHttpRequest) msg);
@@ -130,7 +123,16 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Obj
             if (handshaker == null) {
                 WebSocketServerHandshakerFactory.sendUnsupportedWebSocketVersionResponse(ctx.channel());
             } else {
-                handshaker.handshake(ctx.channel(), req);
+                handshaker.handshake(ctx.channel(), req).addListener(
+                        new ChannelFutureListener() {
+                            @Override
+                            public void operationComplete(final ChannelFuture future) throws Exception {
+                                if (future.isSuccess()) {
+                                    connectedChannels.add(ctx.channel());
+                                    connectionMonitor.connectionEstablished(getContext(ctx));
+                                }
+                            }
+                        });
             }
         }
     }
