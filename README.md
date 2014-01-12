@@ -92,7 +92,8 @@ class DelayResponseHandler extends AbstractMessageHandler {
         // if incoming text contains only digits
         if (text ==~ /\d+/) {
             def delayInSeconds = Integer.parseInt(text);
-            def newWorkItem = MessageReceivedEvent.create(receivedEvent.connectionContext, delayInSeconds, "delayedMessage")
+            def newWorkItem = MessageReceivedEvent.create(
+                    receivedEvent.connectionContext, delayInSeconds, "delayedMessage")
             workerQueue.addDelayed(newWorkItem, delayInSeconds, TimeUnit.SECONDS)
         }
     }
@@ -124,7 +125,7 @@ class SendDelayedMessage extends AbstractMessageHandler {
     void handle(final MessageReceivedEvent receivedEvent) {
         def context = receivedEvent.connectionContext;
 
-        // this text will be received by whoever has connected
+        // this text will be received by whoever has sent the original digits message
         sendTo(context, "This message has been delayed by " + receivedEvent.objectContent + " seconds.")
     }
 }

@@ -6,7 +6,7 @@
 
     <groupId>com.codebullets.external-party-sim</groupId>
     <artifactId>external-party-simulator-root</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <modules>
         <module>simulator-service</module>
         <module>simulator-package</module>

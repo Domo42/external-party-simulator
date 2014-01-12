@@ -7,7 +7,7 @@
     <parent>
         <artifactId>external-party-simulator-root</artifactId>
         <groupId>com.codebullets.external-party-sim</groupId>
-        <version>0.1-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
 
