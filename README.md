@@ -10,6 +10,9 @@ received or a new connection has been established.
 In addition the simulator makes it easy to performed timed events. For example
 if a regular keep alive is expected.
 
+Have a look at the projects github [wiki](https://github.com/Domo42/external-party-simulator/wiki)
+for additional information.
+
 
 ## Writing a Handler
 
