@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Stefan Domnanovits
+ * Copyright 2014 Stefan Domnanovits
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,10 @@
  */
 package com.codebullets.external.party.simulator.pipeline;
 
+import com.codebullets.external.party.simulator.worker.EventItem;
+
 /**
- * Handles a message based on content and type.
+ * Indicates a change in the script folder or one of its sub folders.
  */
-public interface ScriptPipeline {
-    /**
-     * Resets internal state back to defaults.
-     */
-    void reset();
-
-    /**
-     * Handles a message by calling a list of matching handler scripts.
-     */
-    void handle(MessageReceivedEvent message);
-
-    /**
-     * Handles the established connection indication by calling a list of matching handler scripts.
-     */
-    void handle(ConnectionEstablishedEvent establishedEvent);
+public class ScriptsChangedEvent implements EventItem {
 }
