@@ -149,7 +149,9 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Obj
             LOG.debug("{} received {}", ctx.channel(), request);
             connectionMonitor.messageReceived(MessageReceivedEvent.create(getContext(ctx), request));
         } else if (frame instanceof BinaryWebSocketFrame) {
-            byte[] data = frame.content().array();
+            ByteBuf buffer = Unpooled.buffer(frame.content().capacity());
+            buffer.writeBytes(frame.content());
+            byte[] data = buffer.array();
             LOG.debug("{} received {} bytes of data.", ctx.channel(), data.length);
             connectionMonitor.messageReceived(MessageReceivedEvent.create(getContext(ctx), data));
         } else {

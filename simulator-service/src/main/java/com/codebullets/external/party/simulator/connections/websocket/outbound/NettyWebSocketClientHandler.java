@@ -40,6 +40,8 @@ package com.codebullets.external.party.simulator.connections.websocket.outbound;
 import com.codebullets.external.party.simulator.connections.ConnectionMonitor;
 import com.codebullets.external.party.simulator.connections.websocket.NettyConnectionContext;
 import com.codebullets.external.party.simulator.pipeline.MessageReceivedEvent;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
@@ -115,8 +117,11 @@ public class NettyWebSocketClientHandler extends SimpleChannelInboundHandler<Obj
             LOG.debug("WebSocket client {} received message: " + textFrame.text(), connectionName);
             connectionMonitor.messageReceived(MessageReceivedEvent.create(getContext(ctx), textFrame.text()));
         } else if (frame instanceof BinaryWebSocketFrame) {
-            byte[] buffer = frame.content().array();
-            LOG.debug("WebSocket client {} received buffer with length " + buffer.length, connectionName);
+            ByteBuf buffer = Unpooled.buffer(frame.content().capacity());
+            buffer.writeBytes(frame.content());
+            byte[] data = buffer.array();
+            LOG.debug("WebSocket client {} received buffer with length " + data.length, connectionName);
+            connectionMonitor.messageReceived(MessageReceivedEvent.create(getContext(ctx), buffer));
         } else if (frame instanceof PingWebSocketFrame) {
             LOG.trace("WebSocket client {} received ping.", connectionName);
             ctx.channel().write(new PongWebSocketFrame(frame.content().retain()));
