@@ -21,6 +21,20 @@
         </dependency>
 
         <dependency>
+            <groupId>com.codebullets.external-party-sim</groupId>
+            <artifactId>simulator-service</artifactId>
+            <version>${project.version}</version>
+            <classifier>javadoc</classifier>
+        </dependency>
+
+        <dependency>
+            <groupId>com.codebullets.external-party-sim</groupId>
+            <artifactId>simulator-service</artifactId>
+            <version>${project.version}</version>
+            <classifier>sources</classifier>
+        </dependency>
+
+        <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.0.13</version>

@@ -68,9 +68,8 @@
             <useProjectArtifact>false</useProjectArtifact>
             <outputDirectory>/bin</outputDirectory>
             <useTransitiveDependencies>false</useTransitiveDependencies>
-            <outputFileNameMapping>simulator-service.jar</outputFileNameMapping>
             <includes>
-                <include>com.codebullets.external-party-sim:simulator-service</include>
+                <include>com.codebullets.external-party-sim:simulator-service:*:*</include>
             </includes>
         </dependencySet>
     </dependencySets>
