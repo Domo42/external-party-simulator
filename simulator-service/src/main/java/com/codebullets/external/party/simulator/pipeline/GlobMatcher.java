@@ -87,7 +87,9 @@ public class GlobMatcher {
         if (pattern == null) {
             match = text == null;
         } else {
-            match = pattern.matcher(text).matches();
+            if (!Strings.isNullOrEmpty(text)) {
+                match = pattern.matcher(text).matches();
+            }
         }
 
         return match;
